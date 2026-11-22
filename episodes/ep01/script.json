@@ -1,0 +1,159 @@
+{
+  "id": "ep01",
+  "title": "はじめまして！",
+  "titleDa": "Hyggeligt at møde dig!",
+  "titleEn": "Nice to meet you!",
+  "level": "N5",
+  "gapSeconds": 0.5,
+  "characters": {
+    "lulu": { "name": "ルル", "nameDa": "Lulu", "about": "En lille maneki-neko-kat", "voice": "猫使ビィ", "style": "ノーマル" },
+    "momo": { "name": "モモ", "nameDa": "Momo", "about": "En sød kanin, der elsker jordbær", "voice": "雨晴はう", "style": "ノーマル" }
+  },
+  "lines": [
+    {
+      "speaker": "lulu",
+      "da": "Hej!",
+      "en": "Hello!",
+      "tokens": [
+        { "w": "こんにちは", "ro": "konnichiwa", "da": "hej, goddag", "en": "hello, good afternoon", "type": "Udtryk", "lvl": "N5" },
+        { "w": "！", "p": true }
+      ]
+    },
+    {
+      "speaker": "momo",
+      "da": "Hej.",
+      "en": "Hello.",
+      "tokens": [
+        { "w": "こんにちは", "ro": "konnichiwa", "da": "hej, goddag", "en": "hello, good afternoon", "type": "Udtryk", "lvl": "N5" },
+        { "w": "。", "p": true }
+      ]
+    },
+    {
+      "speaker": "lulu",
+      "da": "Hyggeligt at møde dig. Jeg hedder Lulu.",
+      "en": "Nice to meet you. I'm Lulu.",
+      "tokens": [
+        { "w": "はじめまして", "ro": "hajimemashite", "da": "hyggeligt at møde dig (første gang)", "en": "nice to meet you", "type": "Udtryk", "lvl": "N5" },
+        { "w": "。", "p": true },
+        { "w": "私", "r": "わたし", "ro": "watashi", "da": "jeg", "en": "I, me", "type": "Pronomen", "lvl": "N5" },
+        { "w": "は", "ro": "wa", "da": "emne-partikel – det vi taler om", "en": "topic particle", "type": "Partikel", "lvl": "N5" },
+        { "w": "ルル", "ro": "Ruru", "da": "Lulu (navn)", "en": "Lulu (name)", "type": "Navn", "lvl": "–" },
+        { "w": "です", "ro": "desu", "da": "er (høflig form)", "en": "is, am (polite)", "type": "Kopula", "lvl": "N5" },
+        { "w": "。", "p": true }
+      ]
+    },
+    {
+      "speaker": "lulu",
+      "da": "Hvad hedder du?",
+      "en": "What's your name?",
+      "tokens": [
+        { "w": "あなた", "ro": "anata", "da": "du", "en": "you", "type": "Pronomen", "lvl": "N5" },
+        { "w": "の", "ro": "no", "da": "ejefald – »din«, »min«", "en": "possessive particle", "type": "Partikel", "lvl": "N5" },
+        { "w": "名前", "r": "なまえ", "ro": "namae", "da": "navn", "en": "name", "type": "Substantiv", "lvl": "N5" },
+        { "w": "は", "ro": "wa", "da": "emne-partikel – det vi taler om", "en": "topic particle", "type": "Partikel", "lvl": "N5" },
+        { "w": "？", "p": true }
+      ]
+    },
+    {
+      "speaker": "momo",
+      "da": "Jeg hedder Momo. Hyggeligt at møde dig!",
+      "en": "I'm Momo. Nice to meet you!",
+      "tokens": [
+        { "w": "モモ", "ro": "Momo", "da": "Momo (navn)", "en": "Momo (name)", "type": "Navn", "lvl": "–" },
+        { "w": "です", "ro": "desu", "da": "er (høflig form)", "en": "is, am (polite)", "type": "Kopula", "lvl": "N5" },
+        { "w": "。", "p": true },
+        { "w": "よろしく", "ro": "yoroshiku", "da": "hyggeligt at møde dig / lad os være venner", "en": "nice to meet you, please treat me well", "type": "Udtryk", "lvl": "N5" },
+        { "w": "ね", "ro": "ne", "da": "…ikke? (blød, venlig afslutning)", "en": "right? (softening particle)", "type": "Partikel", "lvl": "N5" },
+        { "w": "！", "p": true }
+      ]
+    },
+    {
+      "speaker": "lulu",
+      "da": "Momo, hvad kan du godt lide?",
+      "en": "Momo, what do you like?",
+      "tokens": [
+        { "w": "モモ", "ro": "Momo", "da": "Momo (navn)", "en": "Momo (name)", "type": "Navn", "lvl": "–" },
+        { "w": "ちゃん", "ro": "chan", "da": "kælen endelse til navne", "en": "cute name suffix", "type": "Suffiks", "lvl": "N5" },
+        { "w": "、", "p": true },
+        { "w": "何", "r": "なに", "ro": "nani", "da": "hvad", "en": "what", "type": "Spørgeord", "lvl": "N5" },
+        { "w": "が", "ro": "ga", "da": "subjekt-partikel", "en": "subject particle", "type": "Partikel", "lvl": "N5" },
+        { "w": "好き", "r": "すき", "ro": "suki", "da": "at kunne lide", "en": "to like", "type": "na-adjektiv", "lvl": "N5" },
+        { "w": "？", "p": true }
+      ]
+    },
+    {
+      "speaker": "momo",
+      "da": "Jeg kan godt lide jordbær! Hvad med dig, Lulu?",
+      "en": "I like strawberries! How about you, Lulu?",
+      "tokens": [
+        { "w": "いちご", "ro": "ichigo", "da": "jordbær", "en": "strawberry", "type": "Substantiv", "lvl": "N5" },
+        { "w": "が", "ro": "ga", "da": "subjekt-partikel", "en": "subject particle", "type": "Partikel", "lvl": "N5" },
+        { "w": "好き", "r": "すき", "ro": "suki", "da": "at kunne lide", "en": "to like", "type": "na-adjektiv", "lvl": "N5" },
+        { "w": "！", "p": true },
+        { "w": "ルル", "ro": "Ruru", "da": "Lulu (navn)", "en": "Lulu (name)", "type": "Navn", "lvl": "–" },
+        { "w": "は", "ro": "wa", "da": "og hvad med …? (emne-partikel)", "en": "what about …? (topic particle)", "type": "Partikel", "lvl": "N5" },
+        { "w": "？", "p": true }
+      ]
+    },
+    {
+      "speaker": "lulu",
+      "da": "Jeg elsker fisk!",
+      "en": "I love fish!",
+      "tokens": [
+        { "w": "私", "r": "わたし", "ro": "watashi", "da": "jeg", "en": "I, me", "type": "Pronomen", "lvl": "N5" },
+        { "w": "は", "ro": "wa", "da": "emne-partikel – det vi taler om", "en": "topic particle", "type": "Partikel", "lvl": "N5" },
+        { "w": "魚", "r": "さかな", "ro": "sakana", "da": "fisk", "en": "fish", "type": "Substantiv", "lvl": "N5" },
+        { "w": "が", "ro": "ga", "da": "subjekt-partikel", "en": "subject particle", "type": "Partikel", "lvl": "N5" },
+        { "w": "大好き", "r": "だいすき", "ro": "daisuki", "da": "at elske, at holde meget af", "en": "to love, to like a lot", "type": "na-adjektiv", "lvl": "N5" },
+        { "w": "！", "p": true }
+      ]
+    },
+    {
+      "speaker": "momo",
+      "da": "Fisk? Du er virkelig en kat!",
+      "en": "Fish? You really are a cat!",
+      "tokens": [
+        { "w": "魚", "r": "さかな", "ro": "sakana", "da": "fisk", "en": "fish", "type": "Substantiv", "lvl": "N5" },
+        { "w": "？", "p": true },
+        { "w": "猫", "r": "ねこ", "ro": "neko", "da": "kat", "en": "cat", "type": "Substantiv", "lvl": "N5" },
+        { "w": "だ", "ro": "da", "da": "er (uformel form af です)", "en": "is (casual form of desu)", "type": "Kopula", "lvl": "N5" },
+        { "w": "ね", "ro": "ne", "da": "…ikke? (søger enighed)", "en": "right? (seeking agreement)", "type": "Partikel", "lvl": "N5" },
+        { "w": "！", "p": true }
+      ]
+    },
+    {
+      "speaker": "lulu",
+      "da": "Ja! For jeg er en kat!",
+      "en": "Yep! Because I'm a cat!",
+      "tokens": [
+        { "w": "そう", "ro": "sō", "da": "ja, sådan er det", "en": "yes, that's right", "type": "Udtryk", "lvl": "N5" },
+        { "w": "！", "p": true },
+        { "w": "猫", "r": "ねこ", "ro": "neko", "da": "kat", "en": "cat", "type": "Substantiv", "lvl": "N5" },
+        { "w": "だから", "ro": "dakara", "da": "fordi, derfor", "en": "because, so", "type": "Konjunktion", "lvl": "N5" },
+        { "w": "！", "p": true }
+      ]
+    },
+    {
+      "speaker": "momo",
+      "da": "Haha! Vi ses, Lulu!",
+      "en": "Haha! See you, Lulu!",
+      "tokens": [
+        { "w": "あはは", "ro": "ahaha", "da": "haha (latter)", "en": "haha (laughter)", "type": "Lydord", "lvl": "–" },
+        { "w": "！", "p": true },
+        { "w": "またね", "ro": "mata ne", "da": "vi ses!", "en": "see you!", "type": "Udtryk", "lvl": "N5" },
+        { "w": "、", "p": true },
+        { "w": "ルル", "ro": "Ruru", "da": "Lulu (navn)", "en": "Lulu (name)", "type": "Navn", "lvl": "–" },
+        { "w": "！", "p": true }
+      ]
+    },
+    {
+      "speaker": "lulu",
+      "da": "Vi ses!",
+      "en": "See you!",
+      "tokens": [
+        { "w": "またね", "ro": "mata ne", "da": "vi ses!", "en": "see you!", "type": "Udtryk", "lvl": "N5" },
+        { "w": "！", "p": true }
+      ]
+    }
+  ]
+}

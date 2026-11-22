@@ -1,0 +1,24 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><style>
+html,body{margin:0;overflow:hidden;background:#5B47D6}
+.w{position:absolute;left:0;top:0;display:flex;align-items:center;justify-content:center;background:#5B47D6}
+</style></head><body><div class="w" id="w">
+<svg viewBox="0 0 120 120">
+<path d="M18 60 L26 14 L56 36 Z" fill="#fff" stroke="#241A3D" stroke-width="3.5" stroke-linejoin="round"/>
+<path d="M102 60 L94 14 L64 36 Z" fill="#fff" stroke="#241A3D" stroke-width="3.5" stroke-linejoin="round"/>
+<path d="M28 26 L32 44 L44 36 Z" fill="#FFB3C8"/><path d="M92 26 L88 44 L76 36 Z" fill="#FFB3C8"/>
+<ellipse cx="60" cy="66" rx="46" ry="38" fill="#fff" stroke="#241A3D" stroke-width="3.5"/>
+<path d="M24 54 C30 38 46 31 58 32 C54 45 40 53 24 57 Z" fill="#FFB35C"/>
+<path d="M38 64 Q45 56 52 64" fill="none" stroke="#241A3D" stroke-width="4" stroke-linecap="round"/>
+<path d="M68 64 Q75 56 82 64" fill="none" stroke="#241A3D" stroke-width="4" stroke-linecap="round"/>
+<ellipse cx="36" cy="77" rx="7" ry="4.5" fill="#FFB3C8"/><ellipse cx="84" cy="77" rx="7" ry="4.5" fill="#FFB3C8"/>
+<path d="M56 72 L64 72 L60 76 Z" fill="#CF2F66"/>
+<path d="M53 80 Q56.5 85 60 80 Q63.5 85 67 80" fill="none" stroke="#241A3D" stroke-width="3" stroke-linecap="round"/>
+<path d="M30 98 Q60 112 90 98" fill="none" stroke="#CF2F66" stroke-width="7" stroke-linecap="round"/>
+<circle cx="60" cy="106" r="7" fill="#FFC93C" stroke="#241A3D" stroke-width="2.5"/>
+</svg></div>
+<script>
+var s = Number(new URLSearchParams(location.search).get('s')) || 512;
+var w = document.getElementById('w'); w.style.width = s + 'px'; w.style.height = s + 'px';
+var g = w.querySelector('svg'); g.setAttribute('width', Math.round(s * 0.78)); g.setAttribute('height', Math.round(s * 0.78));
+</script></body></html>

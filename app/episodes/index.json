@@ -1,0 +1,14 @@
+{
+  "episodes": [
+    {
+      "id": "ep01",
+      "title": "はじめまして！",
+      "titleDa": "Hyggeligt at møde dig!",
+      "titleEn": "Nice to meet you!",
+      "level": "N5",
+      "duration": 29.1,
+      "lines": 12,
+      "cast": ["lulu", "momo"]
+    }
+  ]
+}
