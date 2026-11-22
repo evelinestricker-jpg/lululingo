@@ -6,7 +6,7 @@
     2. Kør:  powershell -ExecutionPolicy Bypass -File tools\generate-episode.ps1 -Episode ep01
 
   Manuskript: episodes\<Episode>\script.json
-  Resultat i app\episodes\<Episode>\ (og app\episodes\index.json opdateres):
+  Resultat i docs\episodes\<Episode>\ (og docs\episodes\index.json opdateres):
     lines\01.wav, 02.wav ...  – én lydfil pr. replik
     episode.wav               – hele afsnittet samlet, med små pauser
     subtitles.json            – replikker med start/slut-tid, ord, læsning, dansk og engelsk
@@ -23,7 +23,7 @@ $epDir = Join-Path $root "episodes\$Episode"
 $scriptPath = Join-Path $epDir "script.json"
 if (-not (Test-Path $scriptPath)) { throw "Fandt ikke $scriptPath" }
 # Færdige filer lægges i app-mappen, så web-appen kan bruge dem direkte
-$outDir = Join-Path $root "app\episodes\$Episode"
+$outDir = Join-Path $root "docs\episodes\$Episode"
 New-Item -ItemType Directory -Force -Path $outDir | Out-Null
 
 $utf8 = New-Object System.Text.UTF8Encoding $false
@@ -163,7 +163,7 @@ $json = $out | ConvertTo-Json -Depth 20
 [System.IO.File]::WriteAllText((Join-Path $outDir "subtitles.json"), $json, $utf8)
 
 # Opdatér listen over afsnit, som appens bibliotek læser
-$indexPath = Join-Path $root "app\episodes\index.json"
+$indexPath = Join-Path $root "docs\episodes\index.json"
 $entries = @()
 if (Test-Path $indexPath) {
   $entries = @(([System.IO.File]::ReadAllText($indexPath, $utf8) | ConvertFrom-Json).episodes | Where-Object { $_.id -ne $script.id })

@@ -1,4 +1,9 @@
 node_modules/
+# Hemmeligheder (API-nøgler o.l.) må aldrig komme på GitHub
+.env
+.env.*
+*.env
+*.env.txt
 .claude/settings.local.json
 *.log
 .DS_Store

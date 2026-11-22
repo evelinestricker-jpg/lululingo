@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "description": "Lululingo – lær japansk med Lulu",
   "scripts": {
-    "build:sdk": "esbuild tools/sdk-entry.js --bundle --format=esm --platform=browser --minify --outfile=app/vendor/anthropic.js",
+    "build:sdk": "esbuild tools/sdk-entry.js --bundle --format=esm --platform=browser --minify --outfile=docs/vendor/anthropic.js",
     "serve": "node tools/serve.js",
     "serve:lan": "node tools/serve.js --lan"
   },

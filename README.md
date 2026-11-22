@@ -18,14 +18,15 @@ npm run serve:lan
 
 Åbn den adresse, der vises, i Safari på iPhonen (samme Wi-Fi).
 
-## Læg den online gratis (Netlify)
+## Online (GitHub Pages)
 
-1. Opret en gratis konto på netlify.com.
-2. Gå til **app.netlify.com/drop**.
-3. Træk mappen **`app`** ind på siden.
-4. Åbn adressen i Safari på iPhonen → Del → **Føj til hjemmeskærm**.
+Appen ligger på **https://evelinestricker-jpg.github.io/lululingo/**.
 
-Når du har ændret noget, trækker du `app`-mappen ind igen under dit site (»Deploys«). Hæv `VERSION` i `app/sw.js`, så telefonerne henter de nye filer.
+Selve appen ligger i mappen **`docs`**. GitHub Pages viser den mappe direkte fra `main`, så hver gang der sendes ændringer til GitHub, er de online et minut efter. Hæv `VERSION` i `docs/sw.js`, så telefonerne henter de nye filer.
+
+På iPhonen: åbn adressen i Safari → Del → **Føj til hjemmeskærm**.
+
+Repoet er offentligt. Læg aldrig API-nøgler i koden – de skal kun ind i appens Indstillinger på telefonen.
 
 ## Lav et nyt Lulu-afsnit
 
@@ -37,7 +38,7 @@ Når du har ændret noget, trækker du `app`-mappen ind igen under dit site (»D
 powershell -ExecutionPolicy Bypass -File tools\generate-episode.ps1 -Episode ep02
 ```
 
-Lyd og undertekster havner i `app/episodes/ep02/`, og afsnittet kommer automatisk med i biblioteket.
+Lyd og undertekster havner i `docs/episodes/ep02/`, og afsnittet kommer automatisk med i biblioteket.
 
 ## AI-chatten
 

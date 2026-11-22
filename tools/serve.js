@@ -6,7 +6,7 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 
-const ROOT = path.resolve(__dirname, '..', 'app');
+const ROOT = path.resolve(__dirname, '..', 'docs');
 const PORT = Number(process.env.PORT) || 5173;
 const HOST = process.argv.includes('--lan') ? '0.0.0.0' : '127.0.0.1';
 const TYPES = {
