@@ -343,3 +343,37 @@ select.input { appearance: none; -webkit-appearance: none; background-image: url
   *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
   .actor.talking .mouth { transform: scaleY(.7); }
 }
+
+/* Opkald med Lulu (stemme-samtale) */
+.chat-page.call { gap: 12px; }
+.chat-head .pill svg { vertical-align: -3px; }
+.call-stage { position: relative; height: min(42vh, 330px); border-radius: 28px; overflow: hidden; background: #FFEFF4; box-shadow: 0 8px 22px rgba(36, 26, 61, .14); }
+.call-stage > svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.call-cap { display: flex; flex-direction: column; gap: 8px; }
+.call-cap .cap-main { border-radius: 20px; }
+.call-cap .cap-main .jpt { font-size: 20px; }
+.call-cap .acts { flex-wrap: wrap; }
+.call-cap .acts button[aria-pressed="true"] { background: var(--violet); color: #fff; }
+.call-cap .tip { margin-left: 0; }
+.call-you { align-self: flex-end; max-width: 85%; padding: 10px 14px; border-radius: 20px 20px 6px 20px; background: var(--violet); color: #fff; font-size: 17px; font-weight: 700; font-family: 'M PLUS Rounded 1c', sans-serif; }
+.call-you.interim { background: var(--violet-tint); color: var(--violet); }
+.call-hints { flex-wrap: wrap; overflow: visible; }
+.call-hints .hint { display: inline-flex; border-radius: 19px; border: 2px solid var(--violet-soft); background: #fff; overflow: hidden; }
+.call-hints .hint button { border: 0; border-radius: 0; height: 38px; padding: 0 10px; background: transparent; font-size: 14px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; }
+.call-hints .hint .go { background: var(--violet-tint); color: var(--violet); }
+.call-hints svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.call-ctl { position: sticky; bottom: calc(var(--tabs-h) + var(--safe-b) + 6px); display: flex; align-items: center; justify-content: center; gap: 14px; padding: 10px 0 4px; background: linear-gradient(to bottom, rgba(251,247,255,0), var(--bg) 30%); flex-wrap: wrap; }
+.call-btn { display: inline-flex; align-items: center; gap: 10px; height: 64px; padding: 0 28px; border-radius: 32px; border: 0; background: #2FBF71; color: #fff; font-size: 18px; font-weight: 800; box-shadow: 0 8px 20px rgba(47, 191, 113, .35); animation: ring 1.6s ease-in-out infinite; }
+.call-btn:disabled { background: #B9B3C9; box-shadow: none; animation: none; }
+@keyframes ring { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.04); } }
+.call-ctl .round { width: 52px; height: 52px; border-radius: 26px; border: 0; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.call-ctl .round.soft { background: #fff; color: var(--violet); border: 2px solid var(--line); }
+.call-ctl .round.soft[aria-pressed="true"] { background: var(--violet-tint); border-color: var(--violet-soft); }
+.call-ctl .round.hang { background: #E5484D; color: #fff; }
+.call-ctl .round.hang svg { transform: rotate(135deg); }
+.call-ctl .talk { width: 96px; height: 96px; border-radius: 48px; border: 0; background: var(--pink); color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; box-shadow: 0 10px 24px rgba(207, 47, 102, .35); }
+.call-ctl .talk span { font-size: 11px; font-weight: 800; }
+.call-ctl .talk svg { width: 34px; height: 34px; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.call-ctl .talk.rec { background: #E5484D; animation: listen 1s ease-in-out infinite; }
+.call-ctl .talk:disabled { background: #C9B6D6; box-shadow: none; }
+@keyframes listen { 50% { box-shadow: 0 0 0 16px rgba(229, 72, 77, .18); } }

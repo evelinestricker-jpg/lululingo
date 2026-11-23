@@ -347,7 +347,7 @@ const lastIdx = (arr, t, key = 't') => { let r = -1; for (let i = 0; i < arr.len
 
 // ---------- Selve motoren ----------
 export function mountCartoon(host, E, getTime, isPlaying, { still = false } = {}) {
-  const TL = buildTimeline(E);
+  let TL = buildTimeline(E);
   host.classList.add('toon');
   host.innerHTML = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid slice" aria-hidden="true">${defs()}
 <g data-l="cam"><g data-l="bg"></g><g data-l="back"></g><g data-l="chars">${TL.cast.map(charSVG).join('')}</g><g data-l="front"></g><g data-l="weather"></g></g>
@@ -581,7 +581,10 @@ export function mountCartoon(host, E, getTime, isPlaying, { still = false } = {}
     if (!still) raf = requestAnimationFrame(draw);
   }
   if (still) draw(); else raf = requestAnimationFrame(draw);
-  return () => { dead = true; cancelAnimationFrame(raf); };
+  const stop = () => { dead = true; cancelAnimationFrame(raf); };
+  // Live-styring (bruges af opkaldet med Lulu): tilføj en cue på et givet tidspunkt
+  stop.cue = (c) => { E.cues = (E.cues || []).concat([c]); TL = buildTimeline(E); };
+  return stop;
 }
 
 // Forside til et afsnit: ét stillbillede tegnet ud fra afsnittets "cover" i index.json

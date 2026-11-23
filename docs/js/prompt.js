@@ -14,9 +14,10 @@ export const SCHEMA = {
     reading: { type: 'string', description: 'The whole reply_jp written only in hiragana/katakana.' },
     romaji: { type: 'string', description: 'The whole reply_jp in Hepburn romaji.' },
     translation: { type: 'string', description: 'Translation of reply_jp into the learner\'s language.' },
+    mood: { type: 'string', enum: ['happy', 'laugh', 'surprised', 'think', 'love', 'shy', 'sad', 'idle'], description: "Lulu's facial expression while saying the reply (her cartoon face shows it)." },
     suggestions: { type: 'array', items: { type: 'string' }, description: 'Exactly three short replies the learner could send next, in Japanese at their level.' }
   },
-  required: ['correction', 'explanation', 'reply_jp', 'reading', 'romaji', 'translation', 'suggestions'],
+  required: ['correction', 'explanation', 'reply_jp', 'reading', 'romaji', 'translation', 'mood', 'suggestions'],
   additionalProperties: false
 };
 
@@ -31,6 +32,7 @@ Adapt as you go: if the learner struggles (answers in ${L}, writes わかりま�
 If the learner writes in ${L} or asks what something means, answer them in ${L} in "explanation" – short and friendly, with one example – and then continue the conversation in Japanese in "reply_jp".
 If the learner's Japanese contains a mistake, put a gentle, short correction in ${L} in "correction" that shows the corrected sentence. If it was correct, you may leave "correction" empty, or praise briefly now and then.
 ${words.length ? `Now and then, reuse words the learner is studying: ${words.join('、')}.` : ''}
+The learner often talks to you by voice (speech recognition), so their text may lack punctuation or contain small recognition errors – be forgiving and do not correct obvious recognition glitches. Your reply is read aloud, so keep it short and natural to say.
 Keep everything friendly and suitable for all ages. Never use romaji inside reply_jp.`;
 }
 
@@ -38,7 +40,7 @@ Keep everything friendly and suitable for all ages. Never use romaji inside repl
 export const JSON_INSTRUCTION = `
 
 Answer ONLY with one JSON object (no markdown, no code fences) with exactly these fields:
-{"correction": string, "explanation": string, "reply_jp": string, "reading": string, "romaji": string, "translation": string, "suggestions": [string, string, string]}
+{"correction": string, "explanation": string, "reply_jp": string, "reading": string, "romaji": string, "translation": string, "mood": "happy"|"laugh"|"surprised"|"think"|"love"|"shy"|"sad"|"idle", "suggestions": [string, string, string]}
 Use "" for fields that do not apply.`;
 
 export function normalize(data) {
@@ -46,6 +48,7 @@ export function normalize(data) {
   return {
     correction: s(data.correction), explanation: s(data.explanation), reply_jp: s(data.reply_jp),
     reading: s(data.reading), romaji: s(data.romaji), translation: s(data.translation),
+    mood: ['happy', 'laugh', 'surprised', 'think', 'love', 'shy', 'sad', 'idle'].includes(data.mood) ? data.mood : 'happy',
     suggestions: Array.isArray(data.suggestions) ? data.suggestions.filter((x) => typeof x === 'string').slice(0, 3) : []
   };
 }
