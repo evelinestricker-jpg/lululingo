@@ -1,6 +1,6 @@
 import { db, save, activity } from '../store.js';
 import { cardsIn } from '../srs.js';
-import { esc, icon, lulu, speak, toast } from '../ui.js';
+import { esc, icon, lulu, speak, toast, pickVoice } from '../ui.js';
 import { mountCartoon } from '../cartoon.js';
 
 const GREETING = {
@@ -18,10 +18,6 @@ const svg = (p, s = 22) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" 
 let busy = false;
 
 // ---------- Oplæsning (telefonens egne stemmer) ----------
-function pickVoice(lang) {
-  const v = speechSynthesis.getVoices().filter((x) => x.lang && x.lang.toLowerCase().startsWith(lang));
-  return v.find((x) => /premium|enhanced|forbedret/i.test(x.name)) || v[0] || null;
-}
 // Læser en række stykker op efter hinanden. onTalk(true/false) bruges til Lulus mund.
 function speakParts(parts, onTalk) {
   return new Promise((resolve) => {

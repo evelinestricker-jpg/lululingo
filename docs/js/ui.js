@@ -1,3 +1,5 @@
+import { db } from './store.js';
+
 // Små hjælpere til skærmene: sikker tekst, ikoner, figurer, ark, beskeder og oplæsning.
 export function esc(s) {
   return String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -127,16 +129,29 @@ export function toast(msg) {
   toastT = setTimeout(() => t.classList.remove('show'), 2200);
 }
 
+// Stemmer: telefonens egne. Den stemme man har valgt under Indstillinger bruges først,
+// ellers den bedste (Premium/Forbedret), ellers den første på sproget.
+export function voicesFor(lang) {
+  if (!('speechSynthesis' in window)) return [];
+  return speechSynthesis.getVoices().filter((x) => x.lang && x.lang.toLowerCase().replace('_', '-').startsWith(lang));
+}
+export function pickVoice(lang) {
+  const v = voicesFor(lang);
+  const want = db.settings && db.settings.voices && db.settings.voices[lang];
+  return (want && v.find((x) => x.voiceURI === want || x.name === want))
+    || v.find((x) => /premium|enhanced|forbedret|siri/i.test(x.name)) || v[0] || null;
+}
+if ('speechSynthesis' in window) { try { speechSynthesis.getVoices(); speechSynthesis.addEventListener('voiceschanged', () => {}); } catch (e) {} }
+
 // Japansk oplæsning med telefonens egen stemme (bruges til kana, kanji og Lulus chat)
-export function speak(text, rate = 0.85) {
+export function speak(text, rate = 0.85, lang = 'ja') {
   try {
     if (!('speechSynthesis' in window)) return false;
     speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text);
-    u.lang = 'ja-JP';
+    u.lang = lang === 'ja' ? 'ja-JP' : lang === 'en' ? 'en-US' : 'da-DK';
     u.rate = rate;
-    const v = speechSynthesis.getVoices().filter((x) => x.lang && x.lang.toLowerCase().startsWith('ja'));
-    const best = v.find((x) => /premium|enhanced|forbedret/i.test(x.name)) || v[0];
+    const best = pickVoice(lang);
     if (best) u.voice = best;
     speechSynthesis.speak(u);
     return true;

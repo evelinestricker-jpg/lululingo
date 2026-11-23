@@ -1,7 +1,7 @@
 import { db, save, resetAll } from '../store.js';
 import { cardsIn } from '../srs.js';
 import { OR_MODELS } from '../openrouter.js';
-import { esc, icon, toast } from '../ui.js';
+import { esc, icon, toast, voicesFor, pickVoice, speak } from '../ui.js';
 
 const CLAUDE_MODELS = [
   ['claude-haiku-5-5', 'Claude Haiku 5.5 – billig'],
@@ -73,6 +73,19 @@ export function render(view) {
       <p class="help">Del ikke din telefon eller appen med en gemt nøgle, og sæt gerne en forbrugsgrænse hos udbyderen.</p>
     </section>
 
+    <section class="card stack" id="voiceCard">
+      <h2>Stemmer</h2>
+      <div id="voiceRows"></div>
+      <details class="help">
+        <summary><b>Få en bedre stemme på iPhone</b></summary>
+        <ol>
+          <li>Åbn <b>Indstillinger</b> på iPhonen → <b>Tilgængelighed</b> → <b>Oplæst indhold</b> → <b>Stemmer</b>.</li>
+          <li>Vælg <b>Dansk</b> (eller <b>Japansk</b>) og tryk på en stemme med <b>Forbedret</b> eller <b>Premium</b>. Tryk på sky-ikonet for at hente den.</li>
+          <li>Luk Lululingo helt, åbn den igen, og vælg den nye stemme her.</li>
+        </ol>
+      </details>
+    </section>
+
     <section class="card stack">
       <h2>Dine data</h2>
       <div class="set-row"><b>Flashcards</b><span class="muted small">${cardsIn().length} kort</span></div>
@@ -85,6 +98,32 @@ export function render(view) {
     <p class="credits">Lululingo · Stemmer lavet med VOICEVOX (猫使ビィ, 雨晴はう)</p>`;
 
   const $ = (s) => view.querySelector(s);
+
+  // Stemmevalg (stemmerne kan dukke op lidt efter, at siden er åbnet)
+  const SAMPLE = { da: ['da', 'Dansk stemme', 'Hej! Jeg hedder Lulu. Skal vi lære japansk sammen?'], ja: ['ja', 'Japansk stemme', 'こんにちは！わたしはルルです。いっしょにべんきょうしよう！'] };
+  function voiceRows() {
+    const box = $('#voiceRows');
+    if (!box) return;
+    if (!('speechSynthesis' in window)) { box.innerHTML = '<p class="help">Din browser kan ikke læse op.</p>'; return; }
+    box.innerHTML = Object.entries(SAMPLE).map(([k, [lang, label]]) => {
+      const vs = voicesFor(lang);
+      const cur = pickVoice(lang);
+      return `<div style="margin-bottom:12px">
+        <label class="field-label" for="v-${k}">${label}</label>
+        <div style="display:flex;gap:8px">
+          <select class="input" id="v-${k}" data-lang="${lang}" ${vs.length ? '' : 'disabled'}>${vs.length ? vs.map((v) => `<option value="${esc(v.voiceURI)}" ${cur && cur.voiceURI === v.voiceURI ? 'selected' : ''}>${esc(v.name)}${v.localService === false ? ' (online)' : ''}</option>`).join('') : '<option>Ingen stemme fundet</option>'}</select>
+          <button class="icon-btn soft" data-test="${k}" aria-label="Prøv ${label.toLowerCase()}">${icon('sound')}</button>
+        </div>
+      </div>`;
+    }).join('');
+    box.querySelectorAll('select[data-lang]').forEach((sel) => sel.onchange = () => {
+      S.voices = Object.assign({}, S.voices, { [sel.dataset.lang]: sel.value }); save();
+      speak(SAMPLE[sel.dataset.lang][2], 0.95, sel.dataset.lang);
+    });
+    box.querySelectorAll('[data-test]').forEach((b) => b.onclick = () => { const [lang, , txt] = SAMPLE[b.dataset.test]; if (!speak(txt, 0.95, lang)) toast('Kan ikke læse op'); });
+  }
+  voiceRows();
+  if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = () => { if (document.body.contains(view)) voiceRows(); };
   $('#lang').onchange = (e) => { S.lang = e.target.value; save(); toast('Gemt'); };
   $('#level').onchange = (e) => { S.level = e.target.value; save(); toast('Gemt'); };
   $('#goal').onchange = (e) => { S.goal = Number(e.target.value); save(); toast('Gemt'); };

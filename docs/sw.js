@@ -1,5 +1,5 @@
 // Lululingo offline-cache. Hæv VERSION, når appens filer ændres, så telefonen henter de nye.
-const VERSION = 'lululingo-v5';
+const VERSION = 'lululingo-v6';
 const CORE = [
   './', 'index.html', 'styles.css', 'manifest.webmanifest',
   'js/app.js', 'js/store.js', 'js/srs.js', 'js/ui.js', 'js/data.js', 'js/cartoon.js', 'js/prompt.js', 'js/claude.js', 'js/openrouter.js',
