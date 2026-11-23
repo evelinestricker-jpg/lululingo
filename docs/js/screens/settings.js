@@ -2,6 +2,7 @@ import { db, save, resetAll } from '../store.js';
 import { cardsIn } from '../srs.js';
 import { OR_MODELS } from '../openrouter.js';
 import { esc, icon, toast, voicesFor, pickVoice, speak } from '../ui.js';
+import { PIPER, isPiper, isStored, downloadVoice, removeVoice, unlockAudio } from '../voice.js';
 
 const CLAUDE_MODELS = [
   ['claude-haiku-5-5', 'Claude Haiku 5.5 – billig'],
@@ -95,34 +96,63 @@ export function render(view) {
       <button class="btn ghost" id="reset" style="color:var(--pink-dark)">Nulstil hele appen</button>
     </section>
 
-    <p class="credits">Lululingo · Stemmer lavet med VOICEVOX (猫使ビィ, 雨晴はう)</p>`;
+    <p class="credits">Lululingo · Stemmer lavet med VOICEVOX (猫使ビィ, 雨晴はう, 白上虎太郎, No.7) · Dansk oplæsning: Piper (talesyntese, MIT)</p>`;
 
   const $ = (s) => view.querySelector(s);
 
   // Stemmevalg (stemmerne kan dukke op lidt efter, at siden er åbnet)
   const SAMPLE = { da: ['da', 'Dansk stemme', 'Hej! Jeg hedder Lulu. Skal vi lære japansk sammen?'], ja: ['ja', 'Japansk stemme', 'こんにちは！わたしはルルです。いっしょにべんきょうしよう！'] };
+  const piperHave = {};
+  let piperBusy = '';
+  async function checkPiper() { for (const l of Object.keys(PIPER)) piperHave[l] = await isStored(l); voiceRows(); }
   function voiceRows() {
     const box = $('#voiceRows');
     if (!box) return;
-    if (!('speechSynthesis' in window)) { box.innerHTML = '<p class="help">Din browser kan ikke læse op.</p>'; return; }
     box.innerHTML = Object.entries(SAMPLE).map(([k, [lang, label]]) => {
       const vs = voicesFor(lang);
       const cur = pickVoice(lang);
+      const P = PIPER[lang];
+      const chosen = (S.voices || {})[lang];
+      const piperOpt = P && piperHave[lang] ? `<option value="piper:${lang}" ${isPiper(chosen) ? 'selected' : ''}>${esc(P.name)}</option>` : '';
+      const piperRow = !P ? '' : piperHave[lang]
+        ? `<p class="help">✓ Piper-stemmen er hentet og virker uden internet. <button class="linkish" data-pdel="${lang}">Slet den</button></p>`
+        : `<button class="btn soft block" data-pget="${lang}" ${piperBusy ? 'disabled' : ''} style="margin-top:8px">${piperBusy === lang ? 'Henter stemmen…' : 'Hent gratis bedre stemme (Piper, ' + P.size + ')'}</button><div class="bar" id="pbar-${lang}" ${piperBusy === lang ? '' : 'hidden'} style="margin-top:8px"><span style="width:0%"></span></div>`;
       return `<div style="margin-bottom:12px">
         <label class="field-label" for="v-${k}">${label}</label>
         <div style="display:flex;gap:8px">
-          <select class="input" id="v-${k}" data-lang="${lang}" ${vs.length ? '' : 'disabled'}>${vs.length ? vs.map((v) => `<option value="${esc(v.voiceURI)}" ${cur && cur.voiceURI === v.voiceURI ? 'selected' : ''}>${esc(v.name)}${v.localService === false ? ' (online)' : ''}</option>`).join('') : '<option>Ingen stemme fundet</option>'}</select>
+          <select class="input" id="v-${k}" data-lang="${lang}" ${vs.length || piperOpt ? '' : 'disabled'}>${piperOpt}${vs.length ? vs.map((v) => `<option value="${esc(v.voiceURI)}" ${!isPiper(chosen) && cur && cur.voiceURI === v.voiceURI ? 'selected' : ''}>${esc(v.name)}${v.localService === false ? ' (online)' : ''}</option>`).join('') : (piperOpt ? '' : '<option>Ingen stemme fundet</option>')}</select>
           <button class="icon-btn soft" data-test="${k}" aria-label="Prøv ${label.toLowerCase()}">${icon('sound')}</button>
         </div>
+        ${piperRow}
       </div>`;
     }).join('');
     box.querySelectorAll('select[data-lang]').forEach((sel) => sel.onchange = () => {
       S.voices = Object.assign({}, S.voices, { [sel.dataset.lang]: sel.value }); save();
+      unlockAudio();
       speak(SAMPLE[sel.dataset.lang][2], 0.95, sel.dataset.lang);
     });
-    box.querySelectorAll('[data-test]').forEach((b) => b.onclick = () => { const [lang, , txt] = SAMPLE[b.dataset.test]; if (!speak(txt, 0.95, lang)) toast('Kan ikke læse op'); });
+    box.querySelectorAll('[data-pget]').forEach((b) => b.onclick = async () => {
+      const lang = b.dataset.pget;
+      piperBusy = lang; voiceRows();
+      try {
+        await downloadVoice(lang, (pct) => { const bar = $('#pbar-' + lang + ' span'); if (bar) bar.style.width = pct + '%'; });
+        piperHave[lang] = true;
+        S.voices = Object.assign({}, S.voices, { [lang]: 'piper:' + lang }); save();
+        toast('Stemmen er hentet!');
+      } catch (e) { toast('Kunne ikke hente stemmen. Tjek internettet og prøv igen.'); }
+      piperBusy = ''; voiceRows();
+    });
+    box.querySelectorAll('[data-pdel]').forEach((b) => b.onclick = async () => {
+      const lang = b.dataset.pdel;
+      try { await removeVoice(lang); } catch (e) {}
+      piperHave[lang] = false;
+      if (isPiper((S.voices || {})[lang])) { S.voices = Object.assign({}, S.voices, { [lang]: '' }); save(); }
+      voiceRows();
+    });
+    box.querySelectorAll('[data-test]').forEach((b) => b.onclick = () => { unlockAudio(); const [lang, , txt] = SAMPLE[b.dataset.test]; if (!speak(txt, 0.95, lang)) toast('Kan ikke læse op'); });
   }
   voiceRows();
+  checkPiper();
   if ('speechSynthesis' in window) speechSynthesis.onvoiceschanged = () => { if (document.body.contains(view)) voiceRows(); };
   $('#lang').onchange = (e) => { S.lang = e.target.value; save(); toast('Gemt'); };
   $('#level').onchange = (e) => { S.level = e.target.value; save(); toast('Gemt'); };

@@ -1,11 +1,14 @@
 // Lululingo offline-cache. Hæv VERSION, når appens filer ændres, så telefonen henter de nye.
-const VERSION = 'lululingo-v6';
+const VERSION = 'lululingo-v7';
+// Stemmefiler (Piper) er store og ændrer sig aldrig – de gemmes i deres egen cache, som bliver liggende
+const VOICES = 'lululingo-voices';
+const VOICE_HOSTS = ['huggingface.co', 'cdnjs.cloudflare.com', 'cdn.jsdelivr.net'];
 const CORE = [
   './', 'index.html', 'styles.css', 'manifest.webmanifest',
   'js/app.js', 'js/store.js', 'js/srs.js', 'js/ui.js', 'js/data.js', 'js/cartoon.js', 'js/prompt.js', 'js/claude.js', 'js/openrouter.js',
   'js/screens/home.js', 'js/screens/library.js', 'js/screens/player.js', 'js/screens/cards.js',
   'js/screens/chat.js', 'js/screens/learn.js', 'js/screens/game.js', 'js/screens/settings.js',
-  'vendor/anthropic.js', 'episodes/index.json',
+  'vendor/anthropic.js', 'js/voice.js', 'episodes/index.json',
   'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png'
 ];
 
@@ -14,7 +17,7 @@ self.addEventListener('install', (e) => {
 });
 
 self.addEventListener('activate', (e) => {
-  e.waitUntil(caches.keys().then((keys) => Promise.all(keys.filter((k) => k !== VERSION).map((k) => caches.delete(k)))).then(() => self.clients.claim()));
+  e.waitUntil(caches.keys().then((keys) => Promise.all(keys.filter((k) => k !== VERSION && k !== VOICES).map((k) => caches.delete(k)))).then(() => self.clients.claim()));
 });
 
 self.addEventListener('fetch', (e) => {
@@ -25,6 +28,13 @@ self.addEventListener('fetch', (e) => {
   if (url.hostname === 'api.anthropic.com' || url.hostname === 'openrouter.ai') return;
   // Lyd hentes med Range-forespørgsler – lad browseren klare dem selv
   if (req.headers.has('range')) return;
+  if (VOICE_HOSTS.includes(url.hostname)) {
+    e.respondWith(caches.open(VOICES).then((c) => c.match(req).then((hit) => hit || fetch(req).then((res) => {
+      if (res && res.ok) c.put(req, res.clone());
+      return res;
+    }))));
+    return;
+  }
   const sameOrigin = url.origin === self.location.origin;
   const fonts = url.hostname === 'fonts.googleapis.com' || url.hostname === 'fonts.gstatic.com';
   if (!sameOrigin && !fonts) return;

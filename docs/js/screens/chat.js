@@ -2,6 +2,7 @@ import { db, save, activity } from '../store.js';
 import { cardsIn } from '../srs.js';
 import { esc, icon, lulu, speak, toast, pickVoice } from '../ui.js';
 import { mountCartoon } from '../cartoon.js';
+import { isPiper, sayPiper, stopPiper, unlockAudio } from '../voice.js';
 
 const GREETING = {
   N5: { reply_jp: 'こんにちは！わたしはルルです。あなたの なまえは？', reading: 'こんにちは！わたしはルルです。あなたの なまえは？', romaji: 'Konnichiwa! Watashi wa Ruru desu. Anata no namae wa?', translation: 'Hej! Jeg hedder Lulu. Hvad hedder du?', translationEn: 'Hi! I\'m Lulu. What\'s your name?', suggestions: ['わたしは〇〇です。', 'こんにちは！', 'わかりません'] },
@@ -19,27 +20,43 @@ let busy = false;
 
 // ---------- Oplæsning (telefonens egne stemmer) ----------
 // Læser en række stykker op efter hinanden. onTalk(true/false) bruges til Lulus mund.
-function speakParts(parts, onTalk) {
+let speakRun = 0;
+function webSpeak(p, onTalk) {
   return new Promise((resolve) => {
-    if (!('speechSynthesis' in window) || !parts.length) { resolve(false); return; }
-    speechSynthesis.cancel();
-    let i = 0;
-    const next = () => {
-      if (i >= parts.length) { onTalk(false); resolve(true); return; }
-      const p = parts[i++];
-      const u = new SpeechSynthesisUtterance(p.text);
-      u.lang = p.lang === 'ja' ? 'ja-JP' : p.lang === 'en' ? 'en-US' : 'da-DK';
-      const v = pickVoice(p.lang); if (v) u.voice = v;
-      u.rate = p.rate || 0.9;
-      u.pitch = p.lang === 'ja' ? 1.25 : 1.1;
-      u.onstart = () => onTalk(true);
-      u.onend = () => { onTalk(false); setTimeout(next, 180); };
-      u.onerror = () => { onTalk(false); next(); };
-      speechSynthesis.speak(u);
-    };
-    next();
+    if (!('speechSynthesis' in window)) { resolve(false); return; }
+    const u = new SpeechSynthesisUtterance(p.text);
+    u.lang = p.lang === 'ja' ? 'ja-JP' : p.lang === 'en' ? 'en-US' : 'da-DK';
+    const v = pickVoice(p.lang); if (v) u.voice = v;
+    u.rate = p.rate || 0.9;
+    u.pitch = p.lang === 'ja' ? 1.25 : 1.1;
+    u.onstart = () => onTalk(true);
+    u.onend = () => { onTalk(false); resolve(true); };
+    u.onerror = () => { onTalk(false); resolve(false); };
+    speechSynthesis.speak(u);
   });
 }
+// Læser en række stykker op efter hinanden – med Piper-stemmen, hvis den er valgt, ellers telefonens stemme.
+// onTalk(true/false) bruges til Lulus mund.
+async function speakParts(parts, onTalk) {
+  const run = ++speakRun;
+  try { speechSynthesis.cancel(); } catch (e) {}
+  stopPiper();
+  let any = false;
+  for (const p of parts) {
+    if (run !== speakRun) break;
+    const chosen = db.settings.voices && db.settings.voices[p.lang];
+    let ok = false;
+    if (isPiper(chosen)) {
+      try { ok = await sayPiper(p.lang, p.text, { rate: (p.rate || 0.9) + 0.1, onStart: () => onTalk(true), onEnd: () => onTalk(false) }); } catch (e) { ok = false; }
+    }
+    if (!ok && run === speakRun) ok = await webSpeak(p, onTalk);
+    any = any || ok;
+    if (run === speakRun) await new Promise((r) => setTimeout(r, 180));
+  }
+  onTalk(false);
+  return any;
+}
+function hush() { speakRun++; try { speechSynthesis.cancel(); } catch (e) {} stopPiper(); }
 
 export function render(view) {
   const S = db.settings;
@@ -76,7 +93,7 @@ export function render(view) {
     cleanup.forEach((f) => { try { f(); } catch (e) {} });
     cleanup = [];
     if (rec) { try { rec.abort(); } catch (e) {} rec = null; }
-    try { speechSynthesis.cancel(); } catch (e) {}
+    hush();
   }
 
   function header(extra = '') {
@@ -153,8 +170,8 @@ export function render(view) {
       }
       $('#cap').innerHTML = h;
       const b = (sel, f) => { const el = $('#cap').querySelector(sel); if (el) el.onclick = f; };
-      b('[data-again]', () => sayLast(false));
-      b('[data-slow]', () => sayLast(true));
+      b('[data-again]', () => { unlockAudio(); sayLast(false); });
+      b('[data-slow]', () => { unlockAudio(); sayLast(true); });
       b('[data-tr]', () => { S.tr = !S.tr; save(); caption(); });
       b('[data-ro]', () => { S.ro = !S.ro; save(); caption(); });
     }
@@ -190,7 +207,7 @@ export function render(view) {
       $('#hint').onclick = () => { st.showHints = !st.showHints; hints(); controls(); };
       $('#hang').onclick = endCall;
       const talk = $('#talk');
-      if (talk) talk.onclick = () => (rec ? rec.stop() : listen());
+      if (talk) talk.onclick = () => { unlockAudio(); return rec ? rec.stop() : listen(); };
     }
 
     function you(text, interim) {
@@ -216,7 +233,7 @@ export function render(view) {
 
     function listen() {
       if (busy) return;
-      try { speechSynthesis.cancel(); } catch (e) {}
+      hush();
       onTalk(false);
       const R = window.SpeechRecognition || window.webkitSpeechRecognition;
       rec = new R();
@@ -274,6 +291,7 @@ export function render(view) {
     }
 
     function startCall() {
+      unlockAudio();
       greet();
       st.inCall = true; st.t0 = performance.now();
       st.timer = setInterval(tick, 1000);
@@ -285,7 +303,7 @@ export function render(view) {
 
     function endCall() {
       if (rec) { try { rec.abort(); } catch (e) {} rec = null; }
-      try { speechSynthesis.cancel(); } catch (e) {}
+      hush();
       onTalk(false);
       clearInterval(st.timer);
       st.inCall = false; st.phase = 'idle'; st.typing = false; st.showHints = false;

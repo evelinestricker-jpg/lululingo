@@ -63,3 +63,9 @@ Hvis Anthropics SDK skal opdateres: `npm install` og derefter `npm run build:sdk
 ## Stemmer
 
 Stemmerne er lavet med VOICEVOX (猫使ビィ, 雨晴はう). Læs vilkårene for hver stemme på voicevox.hiroshiba.jp, før appen udgives offentligt eller tjener penge.
+
+## Gratis dansk stemme (Piper)
+
+Under Indstillinger → Stemmer kan man hente en gratis neural dansk stemme ([Piper](https://github.com/rhasspy/piper), stemmen `da_DK-talesyntese-medium`, MIT-licens, datasæt CC0). Den kører direkte på telefonen uden API-nøgle. Første gang hentes cirka 60 MB fra Hugging Face, derefter virker den offline. Lulu bruger den til danske forklaringer i opkaldet.
+
+Biblioteket pakkes til `docs/vendor/piper/` med `npm run build:piper`.

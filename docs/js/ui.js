@@ -1,4 +1,5 @@
 import { db } from './store.js';
+import { isPiper, sayPiper, stopPiper, unlockAudio } from './voice.js';
 
 // Små hjælpere til skærmene: sikker tekst, ikoner, figurer, ark, beskeder og oplæsning.
 export function esc(s) {
@@ -146,6 +147,14 @@ if ('speechSynthesis' in window) { try { speechSynthesis.getVoices(); speechSynt
 // Japansk oplæsning med telefonens egen stemme (bruges til kana, kanji og Lulus chat)
 export function speak(text, rate = 0.85, lang = 'ja') {
   try {
+    const chosen = db.settings && db.settings.voices && db.settings.voices[lang];
+    if (isPiper(chosen)) {
+      unlockAudio();
+      try { speechSynthesis.cancel(); } catch (e) {}
+      stopPiper();
+      sayPiper(lang, text, { rate: rate + 0.1 }).catch(() => {});
+      return true;
+    }
     if (!('speechSynthesis' in window)) return false;
     speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text);
