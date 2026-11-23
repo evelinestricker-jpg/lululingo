@@ -689,5 +689,21 @@
       "en": "The end.",
       "post": 1.5
     }
-  ]
+  ],
+  "cover": {
+    "scene": "park",
+    "sky": "day",
+    "pos": {
+      "lulu": 150,
+      "momo": 255
+    },
+    "act": {
+      "lulu": "happy wave",
+      "momo": "shy heart"
+    },
+    "hold": {
+      "momo": "strawberry"
+    },
+    "t": 0.5
+  }
 }

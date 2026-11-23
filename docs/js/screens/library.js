@@ -1,6 +1,6 @@
 import { db } from '../store.js';
 import { esc, icon, loadIndex, fmtTime } from '../ui.js';
-import { thumb } from './home.js';
+import { thumb, drawCovers } from './home.js';
 
 let level = 'Alle';
 
@@ -22,7 +22,7 @@ export async function render(view) {
           const w = db.watched[e.id];
           const prog = w ? Math.min(100, Math.round((w.t / e.duration) * 100)) : 0;
           return `<a class="ep-card" href="#/play/${esc(e.id)}">
-            <div class="thumb">${thumb()}<span class="play">${icon('play')}</span><span class="badge">${esc(e.level)}</span><div class="prog"><span style="width:${prog}%"></span></div></div>
+            <div class="thumb"><div class="cover" data-cover="${esc(e.id)}">${thumb()}</div><span class="play">${icon('play')}</span><span class="badge">${esc(e.level)}</span><div class="prog"><span style="width:${prog}%"></span></div></div>
             <div class="info">
               <div class="ttl"><b class="jp">${esc(e.title)}</b><span class="small muted">${esc(db.settings.lang === 'en' ? e.titleEn : e.titleDa)}</span></div>
               <div class="tags"><span class="tag">${e.lines} replikker</span><span class="tag gray">${fmtTime(e.duration)}</span>${w && w.done ? '<span class="tag mint">Set</span>' : ''}</div>
@@ -37,6 +37,7 @@ export async function render(view) {
           <span class="small muted">Nye Lulu-afsnit laves med VOICEVOX. Senere kan andre videoer tilføjes.</span>
         </span>
       </div>`;
+    drawCovers(view, eps);
     view.querySelectorAll('[data-l]').forEach((b) => b.addEventListener('click', () => { level = b.dataset.l; draw(); }));
   };
   draw();

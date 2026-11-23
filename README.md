@@ -38,6 +38,7 @@ Lav et nyt afsnit sådan her:
    - Replikker skrives med mellemrum mellem ordene (`"jp": "いちご が 好き ！"`). Ordene slås op i `episodes/lexicon.json`. Nye ord tilføjes dér.
    - Pauser uden tale: `{ "beat": 2 }`.
    - Tegnefilmen styres med `scene`, `sky`, `pos`, `act`, `hold`, `props`, `fx`, `cam` og `face`.
+   - Forsiden i biblioteket vælges med `"cover"`. Den bruger de samme felter som en scene, plus `t` for det øjeblik, der vises.
    - Lyden styres med `music` (happy, calm, rain, party, quiet, none) og `sfx`.
 2. Start VOICEVOX-motoren (VOICEVOX-programmet, eller `vv-engine\run.exe`).
 3. Kør:

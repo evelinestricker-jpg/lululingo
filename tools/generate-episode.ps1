@@ -202,6 +202,8 @@ $entries += [ordered]@{
   level = $script.level; duration = [Math]::Round($total, 1); lines = $n
   cast = @($script.characters.PSObject.Properties | Where-Object { $_.Name -ne 'narrator' } | ForEach-Object { $_.Name })
 }
+# Forsiden i biblioteket ("cover" i manuskriptet: en scene med figurer, som tegnefilmen tegner som stillbillede)
+if ($script.cover) { $entries[-1].cover = $script.cover }
 $entries = @($entries | Sort-Object { $_.id })
 [System.IO.File]::WriteAllText($indexPath, ([ordered]@{ episodes = $entries } | ConvertTo-Json -Depth 10), $utf8)
 

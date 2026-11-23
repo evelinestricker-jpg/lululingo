@@ -1,6 +1,7 @@
 import { db, today, streak } from '../store.js';
 import { dueCards, cardsIn } from '../srs.js';
 import { esc, icon, lulu, loadIndex } from '../ui.js';
+import { renderCover } from '../cartoon.js';
 
 function greeting() {
   const h = new Date().getHours();
@@ -56,7 +57,7 @@ export async function render(view) {
     <section class="section">
       <div class="row-between"><h2>Fortsæt med at se</h2><a href="#/library" class="small" style="padding:10px 0">Se alle</a></div>
       <a class="ep-card" href="#/play/${esc(last.id)}">
-        <div class="thumb">${thumb()}<span class="play">${icon('play')}</span><span class="badge">Lulu-afsnit</span><div class="prog"><span style="width:${prog}%"></span></div></div>
+        <div class="thumb"><div class="cover" data-cover="${esc(last.id)}">${thumb()}</div><span class="play">${icon('play')}</span><span class="badge">Lulu-afsnit</span><div class="prog"><span style="width:${prog}%"></span></div></div>
         <div class="info">
           <div class="ttl"><b class="jp">${esc(last.title)}</b><span class="small muted">${esc(db.settings.lang === 'en' ? last.titleEn : last.titleDa)}</span></div>
           <div class="tags"><span class="tag mint">${esc(last.level)} · Begynder</span><span class="tag">${last.lines} replikker</span>${w ? `<span class="tag gray">${w.done ? 'Set færdig' : 'I gang'}</span>` : ''}</div>
@@ -73,6 +74,15 @@ export async function render(view) {
         <a class="tile bg-yellow" href="#/game/particles"><span class="ic c-brown">は</span><b>Partikel-jagt</b><span class="s">Grammatik-spil</span></a>
       </div>
     </section>`;
+  drawCovers(view, eps);
+}
+
+// Tegn hvert afsnits egen forside (bruger den gamle tegning, hvis afsnittet ikke har en)
+export function drawCovers(root, eps) {
+  root.querySelectorAll('[data-cover]').forEach((el) => {
+    const ep = eps.find((e) => e.id === el.dataset.cover);
+    if (ep && ep.cover) { el.innerHTML = ''; renderCover(el, ep); }
+  });
 }
 
 export function thumb() {

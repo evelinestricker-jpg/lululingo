@@ -6,51 +6,517 @@
   "level": "N5",
   "gapSeconds": 0.55,
   "characters": {
-    "lulu": { "name": "ルル", "nameDa": "Lulu", "about": "En lille maneki-neko-kat", "voice": "猫使ビィ", "style": "ノーマル" },
-    "momo": { "name": "モモ", "nameDa": "Momo", "about": "En sød kanin, der elsker jordbær", "voice": "雨晴はう", "style": "ノーマル" },
-    "narrator": { "name": "ナレーター", "nameDa": "Fortæller", "about": "Fortælleren", "voice": "No.7", "style": "読み聞かせ" }
+    "lulu": {
+      "name": "ルル",
+      "nameDa": "Lulu",
+      "about": "En lille maneki-neko-kat",
+      "voice": "猫使ビィ",
+      "style": "ノーマル"
+    },
+    "momo": {
+      "name": "モモ",
+      "nameDa": "Momo",
+      "about": "En sød kanin, der elsker jordbær",
+      "voice": "雨晴はう",
+      "style": "ノーマル"
+    },
+    "narrator": {
+      "name": "ナレーター",
+      "nameDa": "Fortæller",
+      "about": "Fortælleren",
+      "voice": "No.7",
+      "style": "読み聞かせ"
+    }
   },
   "lines": [
-    { "beat": 1.2, "scene": "title", "pos": { "lulu": 80, "momo": 322 }, "act": { "lulu": "happy wave", "momo": "happy hop" }, "music": "calm", "sfx": "chime" },
-    { "s": "narrator", "jp": "ルル と モモ 。 雨 の 日 。", "da": "Lulu og Momo. En regnvejrsdag.", "en": "Lulu and Momo. A rainy day." },
-    { "beat": 2.2, "scene": "room", "sky": "rain", "pos": { "lulu": 200 }, "face": { "lulu": "left" }, "act": { "lulu": "sad" }, "music": "rain" },
-    { "s": "lulu", "jp": "雨 が 降って います 。", "da": "Det regner.", "en": "It's raining.", "act": { "lulu": "sad" } },
-    { "s": "lulu", "jp": "つまらない なあ 。", "da": "Hvor er det kedeligt.", "en": "This is so boring.", "act": { "lulu": "sad sweat" }, "cam": { "z": 1.6, "on": "lulu" } },
-    { "beat": 1.0, "cam": "wide", "act": { "lulu": "surprised !" }, "face": { "lulu": "right" }, "sfx": "knock" },
-    { "s": "momo", "jp": "ルル ちゃん ！ 遊び に@purpose 来た よ ！", "da": "Lulu! Jeg er kommet for at lege!", "en": "Lulu! I came to play!", "pos": { "momo": 300 }, "hold": { "momo": "umbrella" }, "act": { "momo": "happy" }, "face": { "lulu": null } },
-    { "s": "lulu", "jp": "モモ ちゃん ！ ぬれて いない ？", "da": "Momo! Er du ikke blevet våd?", "en": "Momo! Didn't you get wet?", "act": { "lulu": "surprised jump" }, "sfx": "boing" },
-    { "s": "momo", "jp": "大丈夫 。 かさ が ある から 。", "da": "Det er okay. Jeg har en paraply.", "en": "It's okay. I have an umbrella.", "act": { "momo": "happy nod" } },
-    { "beat": 1.0, "hold": { "momo": null }, "act": { "momo": "sad tremble sweat" }, "sfx": "pop" },
-    { "s": "momo", "jp": "でも 、 ちょっと 寒い ね 。", "da": "Men det er lidt koldt, hva'?", "en": "But it's a little cold, isn't it?", "act": { "momo": "sad tremble" } },
-    { "s": "lulu", "jp": "ココア を 飲みません か ？", "da": "Skal vi ikke drikke kakao?", "en": "Shall we have some hot cocoa?", "act": { "lulu": "happy idea" } },
-    { "s": "momo", "jp": "わあ 、 飲みたい ！", "da": "Åh, det vil jeg gerne!", "en": "Ooh, I want some!", "act": { "momo": "happy jump" }, "sfx": "boing" },
-    { "beat": 2.4, "props": ["table@200"], "pos": { "lulu": 108, "momo": 294 }, "hold": { "lulu": "cup", "momo": "cup" }, "act": { "lulu": "happy", "momo": "happy" }, "music": "calm", "sfx": "ding+1.4" },
-    { "s": "momo", "jp": "あったかい 。 おいしい ね 。", "da": "Den er varm. Og lækker, ikke?", "en": "It's warm. Tasty, isn't it?", "act": { "momo": "love heart" } },
-    { "s": "lulu", "jp": "うん 。 雨 の 日 も 、 いい ね 。", "da": "Ja. Regnvejrsdage er også hyggelige.", "en": "Yeah. Rainy days are nice too.", "act": { "lulu": "happy note" } },
-    { "s": "momo", "jp": "ねえ 、 何 を して 遊ぶ ？", "da": "Du, hvad skal vi lege?", "en": "Hey, what shall we play?", "act": { "momo": "think ?" }, "hold": { "lulu": null, "momo": null } },
-    { "s": "lulu", "jp": "絵 を かきましょう ！", "da": "Lad os tegne!", "en": "Let's draw pictures!", "act": { "lulu": "happy jump idea" }, "sfx": "pop" },
-    { "beat": 2.6, "hold": { "lulu": "crayon", "momo": "crayon" }, "act": { "lulu": "think eat", "momo": "think eat" }, "sfx": "scribble" },
-    { "s": "momo", "jp": "ルル ちゃん は 何 を かいて いる の@q ？", "da": "Lulu, hvad tegner du?", "en": "Lulu, what are you drawing?", "act": { "momo": "think ?" } },
-    { "s": "lulu", "jp": "ひみつ ！", "da": "Det er hemmeligt!", "en": "It's a secret!", "act": { "lulu": "shy shake" } },
-    { "beat": 1.6, "act": { "lulu": "think eat dots" }, "sfx": "scribble" },
-    { "s": "lulu", "jp": "じゃーん ！ モモ ちゃん です ！", "da": "Tada! Det er dig, Momo!", "en": "Ta-da! It's you, Momo!", "hold": { "lulu": "picture" }, "act": { "lulu": "happy jump spark" }, "sfx": "tada" },
-    { "s": "momo", "jp": "わあ 、 かわいい ！ ありがとう ！", "da": "Åh, hvor sød! Tak!", "en": "Wow, so cute! Thank you!", "act": { "momo": "love heart bounce" }, "cam": { "z": 1.5, "on": "momo" } },
-    { "s": "momo", "jp": "私 も ルル ちゃん を かきました 。", "da": "Jeg har også tegnet dig, Lulu.", "en": "I drew you too, Lulu.", "hold": { "momo": "picture2" }, "act": { "momo": "happy" }, "cam": "wide" },
-    { "s": "lulu", "jp": "… これ は 猫 です か ？", "da": "…Er det her en kat?", "en": "…Is this a cat?", "act": { "lulu": "think sweat" } },
-    { "s": "momo", "jp": "猫 です ！ ルル ちゃん です ！", "da": "Det er en kat! Det er dig, Lulu!", "en": "It's a cat! It's you, Lulu!", "act": { "momo": "pout anger" }, "fx": ["lines"], "cam": { "z": 1.6, "on": "momo" }, "sfx": "boing" },
-    { "s": "lulu", "jp": "あはは 、 ごめん ね 。 じょうず です よ 。", "da": "Haha, undskyld. Den er rigtig flot.", "en": "Haha, sorry. It's really good.", "act": { "lulu": "laugh", "momo": "shy" }, "cam": "wide" },
-    { "beat": 2.2, "sky": "day", "fx": ["rainbow"], "hold": { "lulu": null, "momo": null }, "face": { "lulu": "left", "momo": "left" }, "act": { "lulu": "surprised !", "momo": "surprised !" }, "music": "happy", "sfx": "sparkle" },
-    { "s": "momo", "jp": "あっ ！ 雨 が 止みました ！", "da": "Åh! Det er holdt op med at regne!", "en": "Oh! The rain has stopped!", "act": { "momo": "happy point" } },
-    { "s": "lulu", "jp": "見て ！ 虹 だ ！", "da": "Se! En regnbue!", "en": "Look! A rainbow!", "act": { "lulu": "happy jump spark" } },
-    { "s": "momo", "jp": "きれい だ ね 。", "da": "Hvor er den smuk.", "en": "It's beautiful, isn't it?", "act": { "momo": "love heart" } },
-    { "s": "lulu", "jp": "外 へ 行きましょう ！", "da": "Lad os gå udenfor!", "en": "Let's go outside!", "face": { "lulu": null, "momo": null }, "act": { "lulu": "happy cheer", "momo": "happy" } },
-    { "beat": 1.4, "pos": { "lulu": "outR", "momo": "outR" }, "act": { "lulu": "happy run", "momo": "happy run" }, "sfx": "whoosh" },
-    { "beat": 2.8, "scene": "park", "sky": "day", "fx": ["rainbow"], "pos": { "lulu": [-40, 170], "momo": [-110, 95] }, "act": { "lulu": "happy", "momo": "happy" }, "sfx": "tweet+1.2" },
-    { "s": "momo", "jp": "水たまり だ ！ えい ！", "da": "En vandpyt! Hop!", "en": "A puddle! Hup!", "pos": { "momo": 270 }, "act": { "momo": "happy run" } },
-    { "beat": 0.9, "act": { "momo": "happy jump" }, "sfx": "splash+0.45" },
-    { "s": "lulu", "jp": "わっ 、 冷たい ！ あはは ！", "da": "Uh, koldt! Haha!", "en": "Whoa, cold! Haha!", "act": { "lulu": "surprised jump sweat" } },
-    { "beat": 2.8, "act": { "lulu": "laugh dance note", "momo": "laugh dance spark" }, "sfx": "sparkle" },
-    { "beat": 0.8, "scene": "end", "pos": { "lulu": 80, "momo": 322 }, "act": { "lulu": "happy wave", "momo": "happy wave" }, "sfx": "tada" },
-    { "s": "narrator", "jp": "おしまい 。", "da": "Slut.", "en": "The end.", "post": 1.5 }
-  ]
+    {
+      "beat": 1.2,
+      "scene": "title",
+      "pos": {
+        "lulu": 80,
+        "momo": 322
+      },
+      "act": {
+        "lulu": "happy wave",
+        "momo": "happy hop"
+      },
+      "music": "calm",
+      "sfx": "chime"
+    },
+    {
+      "s": "narrator",
+      "jp": "ルル と モモ 。 雨 の 日 。",
+      "da": "Lulu og Momo. En regnvejrsdag.",
+      "en": "Lulu and Momo. A rainy day."
+    },
+    {
+      "beat": 2.2,
+      "scene": "room",
+      "sky": "rain",
+      "pos": {
+        "lulu": 200
+      },
+      "face": {
+        "lulu": "left"
+      },
+      "act": {
+        "lulu": "sad"
+      },
+      "music": "rain"
+    },
+    {
+      "s": "lulu",
+      "jp": "雨 が 降って います 。",
+      "da": "Det regner.",
+      "en": "It's raining.",
+      "act": {
+        "lulu": "sad"
+      }
+    },
+    {
+      "s": "lulu",
+      "jp": "つまらない なあ 。",
+      "da": "Hvor er det kedeligt.",
+      "en": "This is so boring.",
+      "act": {
+        "lulu": "sad sweat"
+      },
+      "cam": {
+        "z": 1.6,
+        "on": "lulu"
+      }
+    },
+    {
+      "beat": 1,
+      "cam": "wide",
+      "act": {
+        "lulu": "surprised !"
+      },
+      "face": {
+        "lulu": "right"
+      },
+      "sfx": "knock"
+    },
+    {
+      "s": "momo",
+      "jp": "ルル ちゃん ！ 遊び に@purpose 来た よ ！",
+      "da": "Lulu! Jeg er kommet for at lege!",
+      "en": "Lulu! I came to play!",
+      "pos": {
+        "momo": 300
+      },
+      "hold": {
+        "momo": "umbrella"
+      },
+      "act": {
+        "momo": "happy"
+      },
+      "face": {
+        "lulu": null
+      }
+    },
+    {
+      "s": "lulu",
+      "jp": "モモ ちゃん ！ ぬれて いない ？",
+      "da": "Momo! Er du ikke blevet våd?",
+      "en": "Momo! Didn't you get wet?",
+      "act": {
+        "lulu": "surprised jump"
+      },
+      "sfx": "boing"
+    },
+    {
+      "s": "momo",
+      "jp": "大丈夫 。 かさ が ある から 。",
+      "da": "Det er okay. Jeg har en paraply.",
+      "en": "It's okay. I have an umbrella.",
+      "act": {
+        "momo": "happy nod"
+      }
+    },
+    {
+      "beat": 1,
+      "hold": {
+        "momo": null
+      },
+      "act": {
+        "momo": "sad tremble sweat"
+      },
+      "sfx": "pop"
+    },
+    {
+      "s": "momo",
+      "jp": "でも 、 ちょっと 寒い ね 。",
+      "da": "Men det er lidt koldt, hva'?",
+      "en": "But it's a little cold, isn't it?",
+      "act": {
+        "momo": "sad tremble"
+      }
+    },
+    {
+      "s": "lulu",
+      "jp": "ココア を 飲みません か ？",
+      "da": "Skal vi ikke drikke kakao?",
+      "en": "Shall we have some hot cocoa?",
+      "act": {
+        "lulu": "happy idea"
+      }
+    },
+    {
+      "s": "momo",
+      "jp": "わあ 、 飲みたい ！",
+      "da": "Åh, det vil jeg gerne!",
+      "en": "Ooh, I want some!",
+      "act": {
+        "momo": "happy jump"
+      },
+      "sfx": "boing"
+    },
+    {
+      "beat": 2.4,
+      "props": [
+        "table@200"
+      ],
+      "pos": {
+        "lulu": 108,
+        "momo": 294
+      },
+      "hold": {
+        "lulu": "cup",
+        "momo": "cup"
+      },
+      "act": {
+        "lulu": "happy",
+        "momo": "happy"
+      },
+      "music": "calm",
+      "sfx": "ding+1.4"
+    },
+    {
+      "s": "momo",
+      "jp": "あったかい 。 おいしい ね 。",
+      "da": "Den er varm. Og lækker, ikke?",
+      "en": "It's warm. Tasty, isn't it?",
+      "act": {
+        "momo": "love heart"
+      }
+    },
+    {
+      "s": "lulu",
+      "jp": "うん 。 雨 の 日 も 、 いい ね 。",
+      "da": "Ja. Regnvejrsdage er også hyggelige.",
+      "en": "Yeah. Rainy days are nice too.",
+      "act": {
+        "lulu": "happy note"
+      }
+    },
+    {
+      "s": "momo",
+      "jp": "ねえ 、 何 を して 遊ぶ ？",
+      "da": "Du, hvad skal vi lege?",
+      "en": "Hey, what shall we play?",
+      "act": {
+        "momo": "think ?"
+      },
+      "hold": {
+        "lulu": null,
+        "momo": null
+      }
+    },
+    {
+      "s": "lulu",
+      "jp": "絵 を かきましょう ！",
+      "da": "Lad os tegne!",
+      "en": "Let's draw pictures!",
+      "act": {
+        "lulu": "happy jump idea"
+      },
+      "sfx": "pop"
+    },
+    {
+      "beat": 2.6,
+      "hold": {
+        "lulu": "crayon",
+        "momo": "crayon"
+      },
+      "act": {
+        "lulu": "think eat",
+        "momo": "think eat"
+      },
+      "sfx": "scribble"
+    },
+    {
+      "s": "momo",
+      "jp": "ルル ちゃん は 何 を かいて いる の@q ？",
+      "da": "Lulu, hvad tegner du?",
+      "en": "Lulu, what are you drawing?",
+      "act": {
+        "momo": "think ?"
+      }
+    },
+    {
+      "s": "lulu",
+      "jp": "ひみつ ！",
+      "da": "Det er hemmeligt!",
+      "en": "It's a secret!",
+      "act": {
+        "lulu": "shy shake"
+      }
+    },
+    {
+      "beat": 1.6,
+      "act": {
+        "lulu": "think eat dots"
+      },
+      "sfx": "scribble"
+    },
+    {
+      "s": "lulu",
+      "jp": "じゃーん ！ モモ ちゃん です ！",
+      "da": "Tada! Det er dig, Momo!",
+      "en": "Ta-da! It's you, Momo!",
+      "hold": {
+        "lulu": "picture"
+      },
+      "act": {
+        "lulu": "happy jump spark"
+      },
+      "sfx": "tada"
+    },
+    {
+      "s": "momo",
+      "jp": "わあ 、 かわいい ！ ありがとう ！",
+      "da": "Åh, hvor sød! Tak!",
+      "en": "Wow, so cute! Thank you!",
+      "act": {
+        "momo": "love heart bounce"
+      },
+      "cam": {
+        "z": 1.5,
+        "on": "momo"
+      }
+    },
+    {
+      "s": "momo",
+      "jp": "私 も ルル ちゃん を かきました 。",
+      "da": "Jeg har også tegnet dig, Lulu.",
+      "en": "I drew you too, Lulu.",
+      "hold": {
+        "momo": "picture2"
+      },
+      "act": {
+        "momo": "happy"
+      },
+      "cam": "wide"
+    },
+    {
+      "s": "lulu",
+      "jp": "… これ は 猫 です か ？",
+      "da": "…Er det her en kat?",
+      "en": "…Is this a cat?",
+      "act": {
+        "lulu": "think sweat"
+      }
+    },
+    {
+      "s": "momo",
+      "jp": "猫 です ！ ルル ちゃん です ！",
+      "da": "Det er en kat! Det er dig, Lulu!",
+      "en": "It's a cat! It's you, Lulu!",
+      "act": {
+        "momo": "pout anger"
+      },
+      "fx": [
+        "lines"
+      ],
+      "cam": {
+        "z": 1.6,
+        "on": "momo"
+      },
+      "sfx": "boing"
+    },
+    {
+      "s": "lulu",
+      "jp": "あはは 、 ごめん ね 。 じょうず です よ 。",
+      "da": "Haha, undskyld. Den er rigtig flot.",
+      "en": "Haha, sorry. It's really good.",
+      "act": {
+        "lulu": "laugh",
+        "momo": "shy"
+      },
+      "cam": "wide"
+    },
+    {
+      "beat": 2.2,
+      "sky": "day",
+      "fx": [
+        "rainbow"
+      ],
+      "hold": {
+        "lulu": null,
+        "momo": null
+      },
+      "face": {
+        "lulu": "left",
+        "momo": "left"
+      },
+      "act": {
+        "lulu": "surprised !",
+        "momo": "surprised !"
+      },
+      "music": "happy",
+      "sfx": "sparkle"
+    },
+    {
+      "s": "momo",
+      "jp": "あっ ！ 雨 が 止みました ！",
+      "da": "Åh! Det er holdt op med at regne!",
+      "en": "Oh! The rain has stopped!",
+      "act": {
+        "momo": "happy point"
+      }
+    },
+    {
+      "s": "lulu",
+      "jp": "見て ！ 虹 だ ！",
+      "da": "Se! En regnbue!",
+      "en": "Look! A rainbow!",
+      "act": {
+        "lulu": "happy jump spark"
+      }
+    },
+    {
+      "s": "momo",
+      "jp": "きれい だ ね 。",
+      "da": "Hvor er den smuk.",
+      "en": "It's beautiful, isn't it?",
+      "act": {
+        "momo": "love heart"
+      }
+    },
+    {
+      "s": "lulu",
+      "jp": "外 へ 行きましょう ！",
+      "da": "Lad os gå udenfor!",
+      "en": "Let's go outside!",
+      "face": {
+        "lulu": null,
+        "momo": null
+      },
+      "act": {
+        "lulu": "happy cheer",
+        "momo": "happy"
+      }
+    },
+    {
+      "beat": 1.4,
+      "pos": {
+        "lulu": "outR",
+        "momo": "outR"
+      },
+      "act": {
+        "lulu": "happy run",
+        "momo": "happy run"
+      },
+      "sfx": "whoosh"
+    },
+    {
+      "beat": 2.8,
+      "scene": "park",
+      "sky": "day",
+      "fx": [
+        "rainbow"
+      ],
+      "pos": {
+        "lulu": [
+          -40,
+          170
+        ],
+        "momo": [
+          -110,
+          95
+        ]
+      },
+      "act": {
+        "lulu": "happy",
+        "momo": "happy"
+      },
+      "sfx": "tweet+1.2"
+    },
+    {
+      "s": "momo",
+      "jp": "水たまり だ ！ えい ！",
+      "da": "En vandpyt! Hop!",
+      "en": "A puddle! Hup!",
+      "pos": {
+        "momo": 270
+      },
+      "act": {
+        "momo": "happy run"
+      }
+    },
+    {
+      "beat": 0.9,
+      "act": {
+        "momo": "happy jump"
+      },
+      "sfx": "splash+0.45"
+    },
+    {
+      "s": "lulu",
+      "jp": "わっ 、 冷たい ！ あはは ！",
+      "da": "Uh, koldt! Haha!",
+      "en": "Whoa, cold! Haha!",
+      "act": {
+        "lulu": "surprised jump sweat"
+      }
+    },
+    {
+      "beat": 2.8,
+      "act": {
+        "lulu": "laugh dance note",
+        "momo": "laugh dance spark"
+      },
+      "sfx": "sparkle"
+    },
+    {
+      "beat": 0.8,
+      "scene": "end",
+      "pos": {
+        "lulu": 80,
+        "momo": 322
+      },
+      "act": {
+        "lulu": "happy wave",
+        "momo": "happy wave"
+      },
+      "sfx": "tada"
+    },
+    {
+      "s": "narrator",
+      "jp": "おしまい 。",
+      "da": "Slut.",
+      "en": "The end.",
+      "post": 1.5
+    }
+  ],
+  "cover": {
+    "scene": "street",
+    "sky": "rain",
+    "pos": {
+      "lulu": 140,
+      "momo": 235
+    },
+    "act": {
+      "lulu": "surprised sweat",
+      "momo": "happy"
+    },
+    "hold": {
+      "momo": "umbrella"
+    },
+    "face": {
+      "momo": "left"
+    },
+    "t": 0.5
+  }
 }

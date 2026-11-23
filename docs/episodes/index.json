@@ -1,58 +1,138 @@
 {
-    "episodes":  [
-                     {
-                         "id":  "ep01",
-                         "title":  "はじめまして！",
-                         "titleDa":  "Hyggeligt at møde dig!",
-                         "titleEn":  "Nice to meet you!",
-                         "level":  "N5",
-                         "duration":  40.7,
-                         "lines":  14,
-                         "cast":  [
-                                      "lulu",
-                                      "momo"
-                                  ]
-                     },
-                     {
-                         "id":  "ep02",
-                         "title":  "パン屋さんへ行こう！",
-                         "titleDa":  "Lad os tage til bageren!",
-                         "titleEn":  "Let\u0027s go to the bakery!",
-                         "level":  "N5",
-                         "duration":  107.7,
-                         "lines":  30,
-                         "cast":  [
-                                      "lulu",
-                                      "momo",
-                                      "pon"
-                                  ]
-                     },
-                     {
-                         "id":  "ep03",
-                         "title":  "雨の日",
-                         "titleDa":  "En regnvejrsdag",
-                         "titleEn":  "A rainy day",
-                         "level":  "N5",
-                         "duration":  96.7,
-                         "lines":  28,
-                         "cast":  [
-                                      "lulu",
-                                      "momo"
-                                  ]
-                     },
-                     {
-                         "id":  "ep04",
-                         "title":  "お誕生日おめでとう！",
-                         "titleDa":  "Tillykke med fødselsdagen!",
-                         "titleEn":  "Happy birthday!",
-                         "level":  "N5",
-                         "duration":  109.3,
-                         "lines":  30,
-                         "cast":  [
-                                      "lulu",
-                                      "momo",
-                                      "pon"
-                                  ]
-                     }
-                 ]
+  "episodes": [
+    {
+      "id": "ep01",
+      "title": "はじめまして！",
+      "titleDa": "Hyggeligt at møde dig!",
+      "titleEn": "Nice to meet you!",
+      "level": "N5",
+      "duration": 40.7,
+      "lines": 14,
+      "cast": [
+        "lulu",
+        "momo"
+      ],
+      "cover": {
+        "scene": "park",
+        "sky": "day",
+        "pos": {
+          "lulu": 150,
+          "momo": 255
+        },
+        "act": {
+          "lulu": "happy wave",
+          "momo": "shy heart"
+        },
+        "hold": {
+          "momo": "strawberry"
+        },
+        "t": 0.5
+      }
+    },
+    {
+      "id": "ep02",
+      "title": "パン屋さんへ行こう！",
+      "titleDa": "Lad os tage til bageren!",
+      "titleEn": "Let's go to the bakery!",
+      "level": "N5",
+      "duration": 107.7,
+      "lines": 30,
+      "cast": [
+        "lulu",
+        "momo",
+        "pon"
+      ],
+      "cover": {
+        "scene": "bakery",
+        "pos": {
+          "lulu": 170,
+          "momo": 85,
+          "pon": 318
+        },
+        "act": {
+          "lulu": "love heart",
+          "momo": "happy",
+          "pon": "happy"
+        },
+        "hold": {
+          "lulu": "bread",
+          "momo": "pinkbread"
+        },
+        "t": 0.5
+      }
+    },
+    {
+      "id": "ep03",
+      "title": "雨の日",
+      "titleDa": "En regnvejrsdag",
+      "titleEn": "A rainy day",
+      "level": "N5",
+      "duration": 96.7,
+      "lines": 28,
+      "cast": [
+        "lulu",
+        "momo"
+      ],
+      "cover": {
+        "scene": "street",
+        "sky": "rain",
+        "pos": {
+          "lulu": 140,
+          "momo": 235
+        },
+        "act": {
+          "lulu": "surprised sweat",
+          "momo": "happy"
+        },
+        "hold": {
+          "momo": "umbrella"
+        },
+        "face": {
+          "momo": "left"
+        },
+        "t": 0.5
+      }
+    },
+    {
+      "id": "ep04",
+      "title": "お誕生日おめでとう！",
+      "titleDa": "Tillykke med fødselsdagen!",
+      "titleEn": "Happy birthday!",
+      "level": "N5",
+      "duration": 109.3,
+      "lines": 30,
+      "cast": [
+        "lulu",
+        "momo",
+        "pon"
+      ],
+      "cover": {
+        "scene": "room",
+        "sky": "night",
+        "props": [
+          "table@200",
+          "cake@200",
+          "garland",
+          "balloons@345"
+        ],
+        "fx": [
+          "candles"
+        ],
+        "pos": {
+          "lulu": 105,
+          "pon": 290,
+          "momo": 365
+        },
+        "act": {
+          "lulu": "happy cheer",
+          "pon": "happy",
+          "momo": "love heart"
+        },
+        "hold": {
+          "momo": "ribbon"
+        },
+        "t": 0.45
+      }
+    }
+  ]
 }

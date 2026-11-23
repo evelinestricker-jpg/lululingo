@@ -346,7 +346,7 @@ const lastAt = (arr, t) => { let r = null; for (let i = 0; i < arr.length; i++) 
 const lastIdx = (arr, t, key = 't') => { let r = -1; for (let i = 0; i < arr.length; i++) { if (arr[i][key] <= t) r = i; else break; } return r; };
 
 // ---------- Selve motoren ----------
-export function mountCartoon(host, E, getTime, isPlaying) {
+export function mountCartoon(host, E, getTime, isPlaying, { still = false } = {}) {
   const TL = buildTimeline(E);
   host.classList.add('toon');
   host.innerHTML = `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid slice" aria-hidden="true">${defs()}
@@ -578,8 +578,20 @@ export function mountCartoon(host, E, getTime, isPlaying) {
     const cy = clamp(GROUND - 62, vh / 2, H - vh / 2);
     L.cam.setAttribute('transform', cam.z === 1 ? '' : `translate(${W / 2} ${H / 2}) scale(${cam.z.toFixed(3)}) translate(${(-cx).toFixed(2)} ${(-cy).toFixed(2)})`);
 
-    raf = requestAnimationFrame(draw);
+    if (!still) raf = requestAnimationFrame(draw);
   }
-  raf = requestAnimationFrame(draw);
+  if (still) draw(); else raf = requestAnimationFrame(draw);
   return () => { dead = true; cancelAnimationFrame(raf); };
+}
+
+// Forside til et afsnit: ét stillbillede tegnet ud fra afsnittets "cover" i index.json
+export function renderCover(host, ep) {
+  const c = ep && ep.cover;
+  if (!c) return false;
+  const chars = {};
+  (ep.cast || []).forEach((k) => { chars[k] = {}; });
+  const { t = 0.3, ...cue } = c;
+  const E = { title: ep.title, characters: chars, cues: [Object.assign({ t: 0 }, cue)], lines: [] };
+  mountCartoon(host, E, () => t, () => false, { still: true });
+  return true;
 }
