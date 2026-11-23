@@ -116,6 +116,36 @@ h2 { margin: 0; font-family: 'M PLUS Rounded 1c', sans-serif; font-size: 19px; f
 .topbar .t b { font-family: 'M PLUS Rounded 1c', sans-serif; font-size: 17px; font-weight: 800; }
 .topbar .t span { font-size: 13px; font-weight: 700; color: var(--muted); }
 .stage { position: relative; height: 230px; border-radius: 24px; overflow: hidden; background: #FFF4E8; }
+.stage.toon { height: auto; aspect-ratio: 16 / 9; background: #FFEFF4; box-shadow: 0 6px 18px rgba(36, 26, 61, .12); }
+.stage.toon > svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.toon .toon-drift { animation: toon-drift 60s linear infinite; }
+.toon .toon-drift.d1 { animation-duration: 70s; animation-delay: -20s; }
+.toon .toon-drift.d2 { animation-duration: 95s; animation-delay: -50s; }
+.toon .toon-drift.d3 { animation-duration: 120s; animation-delay: -10s; }
+.toon .toon-drift.win { animation-duration: 40s; }
+.toon .toon-drift.grey path { fill: #E3E6EE; stroke: #B9BFCC; }
+@keyframes toon-drift { from { transform: translateX(-120px); } to { transform: translateX(260px); } }
+.toon .toon-spin { animation: toon-spin 14s linear infinite; transform-box: fill-box; transform-origin: center; }
+.toon .toon-spin.slow { animation-duration: 40s; transform-box: view-box; }
+@keyframes toon-spin { to { transform: rotate(360deg); } }
+.toon .toon-sway { animation: toon-sway 3.4s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: 50% 100%; }
+@keyframes toon-sway { from { transform: rotate(-2deg); } to { transform: rotate(2deg); } }
+.toon .toon-twinkle { animation: toon-twinkle 1.8s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: center; }
+@keyframes toon-twinkle { from { opacity: .35; transform: scale(.7); } to { opacity: 1; transform: scale(1.1); } }
+.toon .toon-rain { animation: toon-rain .55s linear infinite; }
+.toon .toon-rain.small { animation-duration: .45s; }
+@keyframes toon-rain { from { transform: translate(0, -20px); } to { transform: translate(-8px, 20px); } }
+.toon .toon-steam { animation: toon-steam 2.2s ease-in-out infinite; }
+@keyframes toon-steam { 0% { opacity: 0; transform: translateY(4px); } 40% { opacity: .9; } 100% { opacity: 0; transform: translateY(-6px); } }
+.toon .toon-flame { animation: toon-flame .18s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: 50% 100%; }
+@keyframes toon-flame { from { transform: scale(.9, 1); } to { transform: scale(1.05, 1.15); } }
+.toon .toon-fly { animation: toon-fly 9s ease-in-out infinite; }
+@keyframes toon-fly { 0% { transform: translate(250px, 120px) scale(.8); } 25% { transform: translate(330px, 90px) scale(.8, .5); } 50% { transform: translate(280px, 60px) scale(.8); } 75% { transform: translate(200px, 100px) scale(.8, .5); } 100% { transform: translate(250px, 120px) scale(.8); } }
+.toon .toon-confetti { animation: toon-confetti 2.8s linear forwards; transform-box: fill-box; transform-origin: center; }
+@keyframes toon-confetti { from { transform: translateY(0) rotate(0); } to { transform: translateY(250px) rotate(540deg); } }
+.toon .toon-pop { animation: toon-pop .6s cubic-bezier(.2, 1.6, .4, 1) both; transform-box: fill-box; transform-origin: center; }
+@keyframes toon-pop { from { transform: scale(.3); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .toon * { animation: none !important; } }
 .stage svg.bg { position: absolute; inset: 0; width: 100%; height: 100%; }
 .actor { position: absolute; bottom: 16px; width: 120px; display: flex; flex-direction: column; align-items: center; gap: 4px; }
 .actor.left { left: 10%; } .actor.right { right: 10%; }

@@ -8,3 +8,6 @@ node_modules/
 *.log
 .DS_Store
 Thumbs.db
+
+docs/_tmp/
+docs/toon-preview.html

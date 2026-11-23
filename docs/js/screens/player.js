@@ -1,6 +1,7 @@
 import { db, save, activity } from '../store.js';
 import { addCard, removeCard, hasCard } from '../srs.js';
-import { esc, icon, CAST, sceneSVG, openSheet, closeSheet, fmtTime, loadEpisode, toast } from '../ui.js';
+import { esc, icon, CAST, openSheet, closeSheet, fmtTime, loadEpisode, toast } from '../ui.js';
+import { mountCartoon } from '../cartoon.js';
 
 export async function render(view, params) {
   const id = params[0] || 'ep01';
@@ -28,10 +29,7 @@ export async function render(view, params) {
       <div class="t"><b class="jp">${esc(E.title)}</b><span>${esc(tr({ da: E.titleDa, en: E.titleEn }))} · ${esc(E.level)}</span></div>
       <span class="chip bg-mint c-mint" id="savedChip"></span>
     </div>
-    <div class="stage" aria-hidden="true">
-      ${sceneSVG()}
-      ${cast.slice(0, 2).map((k, i) => `<div class="actor ${i === 0 ? 'left' : 'right'}" data-actor="${esc(k)}">${CAST[k] ? CAST[k].svg(110, { talk: true }) : ''}<span class="name">${esc((CAST[k] && CAST[k].name) || k)} · ${esc((CAST[k] && CAST[k].da) || k)}</span></div>`).join('')}
-    </div>
+    <div class="stage" id="stage" aria-hidden="true"></div>
     <div class="controls">
       <button class="pp" id="pp" aria-label="Afspil"></button>
       <span class="time" id="time">0:00 / ${fmtTime(E.duration)}</span>
@@ -74,10 +72,9 @@ export async function render(view, params) {
     return 0;
   }
 
-  function setActors() {
-    const l = L();
-    view.querySelectorAll('[data-actor]').forEach((a) => a.classList.toggle('talking', !audio.paused && a.dataset.actor === l.speaker && audio.currentTime <= l.end));
-  }
+  // Tegnefilmen styrer selv figurerne ud fra lydens tid
+  const stopToon = mountCartoon($('#stage'), E, () => audio.currentTime || 0, () => !audio.paused);
+  function setActors() {}
 
   function renderLine() {
     const l = L();
@@ -200,5 +197,5 @@ export async function render(view, params) {
 
   renderRows(); renderLine(); savedCount(); setIcon();
 
-  return () => { cancelAnimationFrame(st.raf); remember(); st.dead = true; audio.pause(); audio.removeAttribute('src'); audio.load(); };
+  return () => { stopToon(); cancelAnimationFrame(st.raf); remember(); st.dead = true; audio.pause(); audio.removeAttribute('src'); audio.load(); };
 }

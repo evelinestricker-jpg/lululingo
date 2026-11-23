@@ -1,14 +1,58 @@
 {
-  "episodes": [
-    {
-      "id": "ep01",
-      "title": "はじめまして！",
-      "titleDa": "Hyggeligt at møde dig!",
-      "titleEn": "Nice to meet you!",
-      "level": "N5",
-      "duration": 29.1,
-      "lines": 12,
-      "cast": ["lulu", "momo"]
-    }
-  ]
+    "episodes":  [
+                     {
+                         "id":  "ep01",
+                         "title":  "はじめまして！",
+                         "titleDa":  "Hyggeligt at møde dig!",
+                         "titleEn":  "Nice to meet you!",
+                         "level":  "N5",
+                         "duration":  40.7,
+                         "lines":  14,
+                         "cast":  [
+                                      "lulu",
+                                      "momo"
+                                  ]
+                     },
+                     {
+                         "id":  "ep02",
+                         "title":  "パン屋さんへ行こう！",
+                         "titleDa":  "Lad os tage til bageren!",
+                         "titleEn":  "Let\u0027s go to the bakery!",
+                         "level":  "N5",
+                         "duration":  107.7,
+                         "lines":  30,
+                         "cast":  [
+                                      "lulu",
+                                      "momo",
+                                      "pon"
+                                  ]
+                     },
+                     {
+                         "id":  "ep03",
+                         "title":  "雨の日",
+                         "titleDa":  "En regnvejrsdag",
+                         "titleEn":  "A rainy day",
+                         "level":  "N5",
+                         "duration":  96.7,
+                         "lines":  28,
+                         "cast":  [
+                                      "lulu",
+                                      "momo"
+                                  ]
+                     },
+                     {
+                         "id":  "ep04",
+                         "title":  "お誕生日おめでとう！",
+                         "titleDa":  "Tillykke med fødselsdagen!",
+                         "titleEn":  "Happy birthday!",
+                         "level":  "N5",
+                         "duration":  109.3,
+                         "lines":  30,
+                         "cast":  [
+                                      "lulu",
+                                      "momo",
+                                      "pon"
+                                  ]
+                     }
+                 ]
 }

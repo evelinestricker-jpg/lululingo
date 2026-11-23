@@ -81,7 +81,9 @@ ${mouth}
 
 export const CAST = {
   lulu: { name: 'ルル', da: 'Lulu', svg: (s, o) => lulu(s, Object.assign({ mood: 'open' }, o)) },
-  momo: { name: 'モモ', da: 'Momo', svg: momo }
+  momo: { name: 'モモ', da: 'Momo', svg: momo },
+  pon: { name: 'ポン', da: 'Pon', svg: momo },
+  narrator: { name: 'ナレーター', da: 'Fortæller', svg: () => '' }
 };
 
 export function sceneSVG() {

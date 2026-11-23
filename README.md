@@ -28,17 +28,25 @@ På iPhonen: åbn adressen i Safari → Del → **Føj til hjemmeskærm**.
 
 Repoet er offentligt. Læg aldrig API-nøgler i koden – de skal kun ind i appens Indstillinger på telefonen.
 
-## Lav et nyt Lulu-afsnit
+## Lulu-afsnittene (tegnefilm)
 
-1. Kopiér `episodes/ep01/script.json` til fx `episodes/ep02/script.json`, og skriv det nye manuskript.
+Afsnittene er små tegnefilm. Tegnefilmsmotoren `docs/js/cartoon.js` tegner scener, figurer (Lulu, Momo og Pon) og effekter i SVG. Den styrer dem ud fra afsnittets tidslinje, så alt følger lyden, også når man spoler. Munden bevæger sig efter stemmens lydstyrke.
+
+Lav et nyt afsnit sådan her:
+
+1. Kopiér fx `episodes/ep02/script.json` til `episodes/ep05/script.json`, og skriv det nye manuskript.
+   - Replikker skrives med mellemrum mellem ordene (`"jp": "いちご が 好き ！"`). Ordene slås op i `episodes/lexicon.json`. Nye ord tilføjes dér.
+   - Pauser uden tale: `{ "beat": 2 }`.
+   - Tegnefilmen styres med `scene`, `sky`, `pos`, `act`, `hold`, `props`, `fx`, `cam` og `face`.
+   - Lyden styres med `music` (happy, calm, rain, party, quiet, none) og `sfx`.
 2. Start VOICEVOX-motoren (VOICEVOX-programmet, eller `vv-engine\run.exe`).
 3. Kør:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File tools\generate-episode.ps1 -Episode ep02
+powershell -ExecutionPolicy Bypass -File tools\generate-episode.ps1 -Episode ep05
 ```
 
-Lyd og undertekster havner i `docs/episodes/ep02/`, og afsnittet kommer automatisk med i biblioteket.
+Lyd, musik, effekter, undertekster og tidslinje havner i `docs/episodes/ep05/`, og afsnittet kommer automatisk med i biblioteket.
 
 ## AI-chatten
 
