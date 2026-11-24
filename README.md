@@ -49,6 +49,24 @@ powershell -ExecutionPolicy Bypass -File tools\generate-episode.ps1 -Episode ep0
 
 Lyd, musik, effekter, undertekster og tidslinje havner i `docs/episodes/ep05/`, og afsnittet kommer automatisk med i biblioteket.
 
+## Rigtige videoer (YouTube)
+
+Under **Se** ligger der, ud over Lulu-afsnittene, også rigtige japanske videoer fra YouTube. De afspilles med YouTubes egen afspiller og har de samme klikbare undertekster som Lulu-afsnittene (furigana, romaji, oversættelse, ordopslag, flashcards og »Gentag replik«).
+
+Tilføj en ny video sådan her:
+
+1. Find en video, der må vises i andre apps (indlejring slået til), og som helst har japanske undertekster lavet af en person.
+2. Lav `videos/<YouTube-id>/script.json` med samme felter som `videos/qJfQyxwVIw4/script.json`. Hver replik får `start` og `end` i sekunder, `jp` med mellemrum mellem ordene, samt `da` og `en`. Ordene slås op i `episodes/lexicon.json`, og nye ord tilføjes dér.
+3. Kør:
+
+```powershell
+node tools/build-videos.js
+```
+
+Underteksterne havner i `docs/videos/<YouTube-id>/`, og videoen kommer automatisk med i biblioteket.
+
+Underteksterne er afskrevet fra videoernes egne japanske undertekster. Spørg kanalen om lov, før appen udgives bredt eller tjener penge.
+
 ## AI-chatten
 
 Under Indstillinger vælger man AI-udbyder og indsætter sin egen nøgle. Nøglen ligger kun på telefonen og sendes kun til udbyderen.

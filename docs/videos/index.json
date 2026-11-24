@@ -1,0 +1,26 @@
+{
+  "videos": [
+    {
+      "id": "SvzCKlfD5mw",
+      "title": "長いもの",
+      "titleDa": "Lange ting",
+      "titleEn": "Long",
+      "level": "N5",
+      "duration": 161,
+      "channel": "にほんごのじかん",
+      "channelUrl": "https://www.youtube.com/@nihongo-no-jikan",
+      "lines": 24
+    },
+    {
+      "id": "qJfQyxwVIw4",
+      "title": "何を食べましょう？",
+      "titleDa": "Hvad skal vi spise?",
+      "titleEn": "What We Want to Eat",
+      "level": "N5",
+      "duration": 170,
+      "channel": "にほんごのじかん",
+      "channelUrl": "https://www.youtube.com/@nihongo-no-jikan",
+      "lines": 23
+    }
+  ]
+}

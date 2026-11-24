@@ -13,6 +13,7 @@ const ROUTES = {
   '': { mod: home, tab: 'home' },
   library: { mod: library, tab: 'library' },
   play: { mod: player, tab: 'library', full: true },
+  watch: { mod: { render: player.renderVideo }, tab: 'library', full: true },
   cards: { mod: cards, tab: 'cards' },
   chat: { mod: chat, tab: 'chat' },
   learn: { mod: learn, tab: 'learn' },

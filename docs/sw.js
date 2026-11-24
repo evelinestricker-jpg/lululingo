@@ -1,5 +1,5 @@
 // Lululingo offline-cache. Hæv VERSION, når appens filer ændres, så telefonen henter de nye.
-const VERSION = 'lululingo-v7';
+const VERSION = 'lululingo-v8';
 // Stemmefiler (Piper) er store og ændrer sig aldrig – de gemmes i deres egen cache, som bliver liggende
 const VOICES = 'lululingo-voices';
 const VOICE_HOSTS = ['huggingface.co', 'cdnjs.cloudflare.com', 'cdn.jsdelivr.net'];
@@ -8,7 +8,7 @@ const CORE = [
   'js/app.js', 'js/store.js', 'js/srs.js', 'js/ui.js', 'js/data.js', 'js/cartoon.js', 'js/prompt.js', 'js/claude.js', 'js/openrouter.js',
   'js/screens/home.js', 'js/screens/library.js', 'js/screens/player.js', 'js/screens/cards.js',
   'js/screens/chat.js', 'js/screens/learn.js', 'js/screens/game.js', 'js/screens/settings.js',
-  'vendor/anthropic.js', 'js/voice.js', 'episodes/index.json',
+  'vendor/anthropic.js', 'js/voice.js', 'episodes/index.json', 'videos/index.json',
   'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png'
 ];
 

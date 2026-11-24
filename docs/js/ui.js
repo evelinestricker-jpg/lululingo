@@ -185,6 +185,18 @@ export async function loadIndex() {
   if (!indexCache) indexCache = fetch('episodes/index.json').then((r) => r.json()).then((j) => j.episodes || []);
   return indexCache;
 }
+// Rigtige videoer fra YouTube (bygges med tools/build-videos.js)
+let videoIndexCache = null;
+const videoCache = {};
+export async function loadVideoIndex() {
+  if (!videoIndexCache) videoIndexCache = fetch('videos/index.json').then((r) => r.json()).then((j) => j.videos || []).catch((e) => { videoIndexCache = null; throw e; });
+  return videoIndexCache;
+}
+export async function loadVideo(id) {
+  if (!/^[A-Za-z0-9_-]{11}$/.test(id)) throw new Error('ukendt video');
+  if (!videoCache[id]) videoCache[id] = fetch('videos/' + id + '/subtitles.json').then((r) => { if (!r.ok) throw new Error('mangler'); return r.json(); }).catch((e) => { delete videoCache[id]; throw e; });
+  return videoCache[id];
+}
 export async function loadEpisode(id) {
   if (!epCache[id]) epCache[id] = fetch('episodes/' + encodeURIComponent(id) + '/subtitles.json').then((r) => { if (!r.ok) throw new Error('mangler'); return r.json(); });
   return epCache[id];
