@@ -2,6 +2,7 @@ import { closeSheet } from './ui.js';
 import * as home from './screens/home.js';
 import * as library from './screens/library.js';
 import * as player from './screens/player.js';
+import * as addvideo from './screens/addvideo.js';
 import * as cards from './screens/cards.js';
 import * as chat from './screens/chat.js';
 import * as learn from './screens/learn.js';
@@ -14,6 +15,7 @@ const ROUTES = {
   library: { mod: library, tab: 'library' },
   play: { mod: player, tab: 'library', full: true },
   watch: { mod: { render: player.renderVideo }, tab: 'library', full: true },
+  'add-video': { mod: addvideo, tab: 'library' },
   cards: { mod: cards, tab: 'cards' },
   chat: { mod: chat, tab: 'chat' },
   learn: { mod: learn, tab: 'learn' },

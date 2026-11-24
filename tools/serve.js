@@ -20,6 +20,14 @@ const TYPES = {
 http.createServer((req, res) => {
   let rel;
   try { rel = decodeURIComponent(new URL(req.url, 'http://x').pathname); } catch { res.writeHead(400); return res.end(); }
+  // Undertekst-tjenesten (samme kode som Cloudflare-workeren) – så »Tilføj video« også virker derhjemme
+  if (rel === '/api/captions') {
+    const url = 'file:///' + path.resolve(__dirname, '..', 'worker', 'captions.mjs').replace(/\\/g, '/');
+    import(url).then((m) => m.default.fetch(new Request('http://localhost' + req.url, { headers: { Origin: req.headers.origin || '' } })))
+      .then(async (r) => { res.writeHead(r.status, Object.fromEntries(r.headers)); res.end(await r.text()); })
+      .catch((e) => { res.writeHead(500, { 'Content-Type': 'application/json' }); res.end(JSON.stringify({ error: 'error', message: String(e && e.message) })); });
+    return;
+  }
   if (rel.endsWith('/')) rel += 'index.html';
   const file = path.resolve(ROOT, '.' + rel);
   if (!file.startsWith(ROOT + path.sep)) { res.writeHead(403); return res.end(); }

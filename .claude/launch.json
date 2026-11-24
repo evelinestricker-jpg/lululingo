@@ -4,13 +4,13 @@
     {
       "name": "lululingo-player",
       "runtimeExecutable": "node",
-      "runtimeArgs": ["tools/serve.js"],
+      "runtimeArgs": ["--use-system-ca", "tools/serve.js"],
       "port": 5173
     },
     {
       "name": "lululingo-player-lan",
       "runtimeExecutable": "node",
-      "runtimeArgs": ["tools/serve.js", "--lan"],
+      "runtimeArgs": ["--use-system-ca", "tools/serve.js", "--lan"],
       "port": 5173
     }
   ]

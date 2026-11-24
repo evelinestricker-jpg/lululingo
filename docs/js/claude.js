@@ -13,6 +13,24 @@ function friendly(err) {
   return 'Noget gik galt: ' + (err && err.message ? err.message : String(err));
 }
 
+// Generel opgave med fast JSON-svar (bruges fx til at lave ordforklaringer til videoer)
+export async function askJson({ apiKey, model, system, user, schema, maxTokens = 16000 }) {
+  const client = new Anthropic({ apiKey, dangerouslyAllowBrowser: true });
+  let msg;
+  try {
+    msg = await client.messages.create({
+      model, max_tokens: maxTokens, system,
+      messages: [{ role: 'user', content: user }],
+      output_config: { effort: 'low', format: { type: 'json_schema', schema } }
+    });
+  } catch (e) {
+    throw new Error(friendly(e));
+  }
+  if (msg.stop_reason === 'max_tokens') throw new Error('Svaret blev for langt.');
+  if (msg.stop_reason === 'refusal') throw new Error('AI’en ville ikke behandle teksten.');
+  return parseJson((msg.content || []).filter((b) => b.type === 'text').map((b) => b.text).join(''));
+}
+
 export async function luluReply({ apiKey, model, level, lang, history, words }) {
   const client = new Anthropic({ apiKey, dangerouslyAllowBrowser: true });
   const params = {

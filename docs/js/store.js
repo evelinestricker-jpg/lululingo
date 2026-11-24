@@ -8,8 +8,10 @@ function defaults() {
       lang: 'da', level: 'N5', furi: true, ro: false, tr: true, goal: 10, speed: 1,
       provider: 'openrouter',                    // 'openrouter' (billigst) eller 'claude'
       orKey: '', orModel: 'z-ai/glm-5.3-flash',  // OpenRouter
-      apiKey: '', model: 'claude-opus-5-5'       // Anthropic Claude
+      apiKey: '', model: 'claude-opus-5-5',      // Anthropic Claude
+      captionsUrl: ''                            // undertekst-tjenesten til egne videoer (Cloudflare Worker)
     },
+    myVideos: [],       // egne videoer fra YouTube (selve underteksterne ligger under lululingo.video.<id>)
     cards: {},          // id -> flashcard (se srs.js)
     watched: {},        // episode-id -> { t: sekunder, done: bool }
     stats: { days: {}, xp: 0, lastDay: null, streak: 0 },

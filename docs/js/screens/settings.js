@@ -1,7 +1,8 @@
 import { db, save, resetAll } from '../store.js';
 import { cardsIn } from '../srs.js';
 import { OR_MODELS } from '../openrouter.js';
-import { esc, icon, toast, voicesFor, pickVoice, speak } from '../ui.js';
+import { esc, icon, toast, voicesFor, pickVoice, speak, askConfirm } from '../ui.js';
+import { isYouTubeUrl } from '../videos.js';
 import { PIPER, isPiper, isStored, downloadVoice, removeVoice, unlockAudio } from '../voice.js';
 
 const CLAUDE_MODELS = [
@@ -11,6 +12,9 @@ const CLAUDE_MODELS = [
 
 export function render(view) {
   const S = db.settings;
+  // Et YouTube-link i feltet til undertekst-tjenesten er en fejl – ryd det og forklar
+  const wrongCap = !!S.captionsUrl && isYouTubeUrl(S.captionsUrl);
+  if (wrongCap) { S.captionsUrl = ''; save(); }
   const or = S.provider !== 'claude';
   const known = OR_MODELS.some((m) => m.id === S.orModel);
   view.innerHTML = `
@@ -72,6 +76,21 @@ export function render(view) {
       <button class="btn primary" id="saveKey">${icon('check')} Gem</button>
       ${(or ? S.orKey : S.apiKey) ? '<button class="btn ghost" id="delKey">Fjern API-nøglen</button>' : ''}
       <p class="help">Del ikke din telefon eller appen med en gemt nøgle, og sæt gerne en forbrugsgrænse hos udbyderen.</p>
+    </section>
+
+    <section class="card stack">
+      <h2>Egne videoer fra YouTube</h2>
+      <div>
+        <label class="field-label" for="capUrl">Adresse på undertekst-tjenesten (fra Cloudflare)</label>
+        ${wrongCap ? '<div class="err">Her stod et YouTube-link, så det er fjernet. Videoer tilføjes under <b>Se → Tilføj en video fra YouTube</b>. Feltet her er kun til adressen på din Cloudflare-tjeneste.</div>' : ''}
+        <input class="input" id="capUrl" inputmode="url" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="https://lululingo-captions.….workers.dev" value="${esc(S.captionsUrl || '')}">
+        <p class="help"><b>Ikke et YouTube-link</b> – videoer tilføjes under Se. Med tjenesten kan appen selv hente de japanske undertekster, når du tilføjer en video. Uden den kan du indsætte underteksterne selv. Tjenesten er gratis og lægges på din egen Cloudflare-konto. Se vejledningen i README på GitHub (afsnittet »Egne videoer«).</p>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn primary" id="capSave" style="flex:1">${icon('check')} Gem</button>
+        <button class="btn soft" id="capTest" style="flex:1">Test</button>
+      </div>
+      <p class="help" id="capMsg" hidden></p>
     </section>
 
     <section class="card stack" id="voiceCard">
@@ -181,8 +200,33 @@ export function render(view) {
     }
     save(); toast(k ? 'Gemt – Lulu er klar' : 'Gemt'); render(view);
   };
+  const capUrl = () => {
+    const u = $('#capUrl').value.trim().replace(/\/+$/, '');
+    return !u || /^https?:\/\//i.test(u) ? u : 'https://' + u;
+  };
+  $('#capSave').onclick = () => {
+    const u = capUrl();
+    if (isYouTubeUrl(u)) { toast('Det er et YouTube-link. Tilføj videoen under Se → Tilføj video.'); return; }
+    if (u && !/^https:\/\//i.test(u) && !/^http:\/\/(localhost|127\.|192\.168\.|10\.)/i.test(u)) { toast('Adressen skal starte med https://'); return; }
+    S.captionsUrl = u; save(); $('#capUrl').value = u; toast(u ? 'Gemt' : 'Adressen er fjernet');
+  };
+  $('#capTest').onclick = async () => {
+    const msg = $('#capMsg');
+    if (isYouTubeUrl(capUrl())) { $('#capMsg').hidden = false; $('#capMsg').textContent = '✗ Det er et YouTube-link. Her skal adressen på din Cloudflare-tjeneste stå, fx https://lululingo-captions.ditnavn.workers.dev'; return; }
+    const u = capUrl() || (location.protocol === 'http:' ? 'api/captions' : '');
+    msg.hidden = false;
+    if (!u) { msg.textContent = 'Skriv adressen først.'; return; }
+    msg.textContent = 'Tester…';
+    try {
+      const r = await fetch(u + (u.includes('?') ? '&' : '?') + 'v=qJfQyxwVIw4');
+      const j = await r.json();
+      msg.textContent = j.segments && j.segments.length ? `✓ Det virker! Fandt ${j.segments.length} japanske undertekster i en testvideo.` : '✗ ' + (j.message || 'Tjenesten svarede ' + r.status + '.');
+    } catch (e) {
+      msg.textContent = '✗ Kunne ikke nå tjenesten. Tjek adressen og internettet.';
+    }
+  };
   const del = $('#delKey');
   if (del) del.onclick = () => { if (or) S.orKey = ''; else S.apiKey = ''; save(); toast('API-nøglen er fjernet'); render(view); };
-  $('#clearChat').onclick = () => { if (confirm('Slette hele chatten med Lulu?')) { db.chat.messages = []; save(); toast('Chatten er slettet'); render(view); } };
-  $('#reset').onclick = () => { if (confirm('Slette ALT – flashcards, fremskridt, chat og indstillinger? Det kan ikke fortrydes.')) resetAll(); };
+  $('#clearChat').onclick = async () => { if (await askConfirm({ title: 'Slet chatten?', text: 'Hele chatten med Lulu bliver slettet.', ok: 'Slet chatten' })) { db.chat.messages = []; save(); toast('Chatten er slettet'); render(view); } };
+  $('#reset').onclick = async () => { if (await askConfirm({ title: 'Nulstil hele appen?', text: 'ALT bliver slettet: flashcards, fremskridt, chat, egne videoer og indstillinger. Det kan ikke fortrydes.', ok: 'Nulstil alt' })) resetAll(); };
 }

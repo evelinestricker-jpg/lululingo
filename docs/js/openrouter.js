@@ -25,6 +25,44 @@ async function errorText(res) {
   return 'Anmodningen blev afvist (' + res.status + ')' + (msg ? ': ' + msg.slice(0, 160) : '');
 }
 
+// Generel opgave med fast JSON-svar (bruges fx til at lave ordforklaringer til videoer)
+export async function askJson({ apiKey, model, system, user, schema, name = 'result', maxTokens = 16000 }) {
+  const body = {
+    model,
+    messages: [{ role: 'system', content: system }, { role: 'user', content: user }],
+    response_format: { type: 'json_schema', json_schema: { name, strict: true, schema } },
+    provider: { require_parameters: true },
+    // Et loft over modellens »tænkning«: GLM tænker ellers i tusindvis af tokens, så svaret tager dobbelt så lang tid
+    reasoning: { max_tokens: 1000, exclude: true },
+    max_tokens: maxTokens
+  };
+  // Et svar må højst tage 3 minutter – ellers prøver vi igen i stedet for at vente for evigt
+  const send = (b) => fetch(URL, {
+    method: 'POST',
+    headers: { 'Authorization': 'Bearer ' + apiKey, 'Content-Type': 'application/json', 'X-Title': 'Lululingo' },
+    body: JSON.stringify(b),
+    signal: typeof AbortSignal !== 'undefined' && AbortSignal.timeout ? AbortSignal.timeout(180000) : undefined
+  });
+  let res;
+  try {
+    res = await send(body);
+    if (res.status === 400 || res.status === 404) {
+      const plain = Object.assign({}, body, { response_format: { type: 'json_object' } });
+      plain.messages = [{ role: 'system', content: system + '\n\nAnswer ONLY with one JSON object matching this JSON schema (no markdown):\n' + JSON.stringify(schema) }, { role: 'user', content: user }];
+      res = await send(plain);
+    }
+  } catch (e) {
+    if (e && (e.name === 'TimeoutError' || e.name === 'AbortError')) throw new Error('AI’en svarede ikke inden for 3 minutter.');
+    throw new Error('Ingen forbindelse til OpenRouter. Tjek internettet og prøv igen.');
+  }
+  if (!res.ok) throw new Error(await errorText(res));
+  const j = await res.json();
+  const choice = j.choices && j.choices[0];
+  if (!choice) throw new Error('OpenRouter sendte et tomt svar.');
+  if (choice.finish_reason === 'length') throw new Error('Svaret blev for langt.');
+  return parseJson(choice.message && choice.message.content);
+}
+
 export async function luluReply({ apiKey, model, level, lang, history, words }) {
   const body = {
     model,

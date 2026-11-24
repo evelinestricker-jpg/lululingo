@@ -67,6 +67,25 @@ Underteksterne havner i `docs/videos/<YouTube-id>/`, og videoen kommer automatis
 
 Underteksterne er afskrevet fra videoernes egne japanske undertekster. Spørg kanalen om lov, før appen udgives bredt eller tjener penge.
 
+## Egne videoer (Tilføj video)
+
+Under **Se → Tilføj en video fra YouTube** kan man selv indsætte et YouTube-link. Appen henter videoens japanske undertekster, og AI'en (samme nøgle som chatten) deler dem op i ord med furigana, romaji og danske/engelske betydninger. Videoen gemmes kun på telefonen og kan slettes igen fra biblioteket.
+
+Videoen skal have japanske undertekster. Dem, en person har skrevet, giver det bedste resultat. YouTubes automatiske undertekster virker også, men kan indeholde fejl.
+
+### Sæt undertekst-tjenesten op (gratis, ca. 5 minutter)
+
+En iPhone-app må ikke selv hente undertekster fra YouTube. Det gør en lille gratis tjeneste på din egen Cloudflare-konto (`worker/captions.mjs`):
+
+1. Opret en gratis konto på **dash.cloudflare.com**.
+2. Vælg **Workers & Pages** → **Create** → **Start with Hello World!**, giv den et navn (fx `lululingo-captions`) og tryk **Deploy**.
+3. Tryk **Edit code**, slet alt i editoren, og indsæt hele indholdet af [`worker/captions.mjs`](https://raw.githubusercontent.com/evelinestricker-jpg/lululingo/main/worker/captions.mjs). Tryk **Deploy**.
+4. Kopiér adressen (fx `https://lululingo-captions.ditnavn.workers.dev`), og indsæt den i appen under **Indstillinger → Egne videoer fra YouTube**. Tryk **Gem** og derefter **Test**.
+
+YouTube blokerer nogle gange den slags tjenester. Så viser appen en besked, og man kan i stedet indsætte underteksterne selv: en SRT- eller VTT-fil, eller teksten fra YouTubes »Vis transskription« på en computer.
+
+Når appen kører lokalt med `npm run serve`, er tjenesten indbygget (`api/captions`), så der skal ikke sættes noget op.
+
 ## AI-chatten
 
 Under Indstillinger vælger man AI-udbyder og indsætter sin egen nøgle. Nøglen ligger kun på telefonen og sendes kun til udbyderen.

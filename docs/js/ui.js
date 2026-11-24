@@ -1,4 +1,5 @@
 import { db } from './store.js';
+import { getMyVideo } from './videos.js';
 import { isPiper, sayPiper, stopPiper, unlockAudio } from './voice.js';
 
 // Små hjælpere til skærmene: sikker tekst, ikoner, figurer, ark, beskeder og oplæsning.
@@ -118,6 +119,22 @@ export function closeSheet() {
   const f = sheetClose; sheetClose = null;
   if (f) f();
 }
+// Spørg »Er du sikker?« i appens eget ark (browserens confirm() bliver nogle steder blokeret)
+export function askConfirm({ title, text = '', ok = 'Slet', danger = true }) {
+  return new Promise((resolve) => {
+    let answered = false;
+    const done = (v) => { if (answered) return; answered = true; resolve(v); };
+    const body = openSheet(`
+      <div class="stack">
+        <h2>${esc(title)}</h2>
+        ${text ? `<p class="muted" style="margin:0;font-weight:600;line-height:1.5">${esc(text)}</p>` : ''}
+        <button class="btn ${danger ? 'pink' : 'primary'} block" data-act="ok">${esc(ok)}</button>
+        <button class="btn ghost block" data-act="no">Fortryd</button>
+      </div>`, { label: title, onClose: () => done(false) });
+    body.querySelector('[data-act=ok]').onclick = () => { done(true); closeSheet(); };
+    body.querySelector('[data-act=no]').onclick = () => closeSheet();
+  });
+}
 document.addEventListener('click', (e) => { if (e.target === sheetEl()) closeSheet(); });
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeSheet(); });
 
@@ -194,6 +211,8 @@ export async function loadVideoIndex() {
 }
 export async function loadVideo(id) {
   if (!/^[A-Za-z0-9_-]{11}$/.test(id)) throw new Error('ukendt video');
+  const mine = getMyVideo(id);
+  if (mine) return mine;
   if (!videoCache[id]) videoCache[id] = fetch('videos/' + id + '/subtitles.json').then((r) => { if (!r.ok) throw new Error('mangler'); return r.json(); }).catch((e) => { delete videoCache[id]; throw e; });
   return videoCache[id];
 }

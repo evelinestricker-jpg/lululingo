@@ -124,6 +124,15 @@ h2 { margin: 0; font-family: 'M PLUS Rounded 1c', sans-serif; font-size: 19px; f
 .stage.video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; }
 .stage .vid-err { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 16px; text-align: center; background: #241A3D; color: #fff; font-size: 14px; }
 .stage .vid-err .small { opacity: .75; }
+.add-thumb { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 16px; background: #241A3D; display: block; }
+.add-wait { align-items: center; text-align: center; }
+.input.area { height: auto; min-height: 160px; padding: 12px 14px; line-height: 1.5; resize: vertical; font-size: 15px; }
+.spinner { width: 36px; height: 36px; border-radius: 50%; border: 4px solid var(--violet-tint); border-top-color: var(--violet); animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.add-card { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: 20px; border: 2px dashed var(--violet-soft); background: var(--violet-tint); color: var(--ink); }
+.add-card .ic { width: 44px; height: 44px; border-radius: 14px; background: #fff; color: var(--violet); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.vid-wrap { position: relative; }
+.vid-wrap .del { position: absolute; right: 10px; top: 10px; width: 36px; height: 36px; border-radius: 18px; border: 0; background: rgba(255,255,255,.92); color: var(--ink); display: flex; align-items: center; justify-content: center; }
 .stage.toon > svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .toon .toon-drift { animation: toon-drift 60s linear infinite; }
 .toon .toon-drift.d1 { animation-duration: 70s; animation-delay: -20s; }
@@ -383,3 +392,4 @@ select.input { appearance: none; -webkit-appearance: none; background-image: url
 .call-ctl .talk:disabled { background: #C9B6D6; box-shadow: none; }
 @keyframes listen { 50% { box-shadow: 0 0 0 16px rgba(229, 72, 77, .18); } }
 .linkish { border: 0; background: none; padding: 0; color: var(--pink); font: inherit; font-weight: 800; text-decoration: underline; }
+.sub-h { margin: 6px 0 0; text-transform: uppercase; letter-spacing: .8px; font-size: 12px; }
