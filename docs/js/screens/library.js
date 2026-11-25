@@ -5,6 +5,14 @@ import { thumb, drawCovers } from './home.js';
 
 let level = 'Alle';
 
+// Kategorierne for de faste videoer (samme nøgler som i tools/build-videos.js)
+const CATS = [
+  ['easy', 'Let japansk', 'Lærere og youtubere, der taler langsomt og tydeligt.'],
+  ['folk', 'Folkeeventyr og yōkai', 'Gamle japanske eventyr og overnaturlige væsner, fortalt på let japansk.'],
+  ['anime', 'Anime', 'Rigtige anime-afsnit – hurtigere og mere naturligt sprog.'],
+  ['drama', 'Drama', 'Korte dramaer om hverdagen i Japan, lavet til dem, der lærer japansk.']
+];
+
 export async function render(view) {
   const [eps, vids] = await Promise.all([loadIndex().catch(() => []), loadVideoIndex().catch(() => [])]);
   const draw = () => {
@@ -28,7 +36,7 @@ export async function render(view) {
         <h1>Bibliotek</h1>
       </div>
       <div class="pills" role="group" aria-label="Niveau">
-        ${['Alle', 'N5', 'N4', 'N3'].map((l) => `<button class="pill" data-l="${l}" aria-pressed="${l === level}">${l}</button>`).join('')}
+        ${['Alle', 'N5', 'N4', 'N3', 'N2'].map((l) => `<button class="pill" data-l="${l}" aria-pressed="${l === level}">${l}</button>`).join('')}
       </div>
       <section class="section">
         <h2>Lulu-afsnit</h2>
@@ -52,8 +60,10 @@ export async function render(view) {
           <span class="stack" style="gap:2px"><b>Tilføj en video fra YouTube</b><span class="small muted">Indsæt et link, så laver appen klikbare undertekster.</span></span>
         </a>
         ${mine.length ? '<h3 class="sub-h muted">Mine videoer</h3>' + mine.map((v) => card(v, true)).join('') : ''}
-        ${mine.length && vlist.length ? '<h3 class="sub-h muted">Udvalgte videoer</h3>' : ''}
-        ${vlist.map((v) => card(v, false)).join('')}
+        ${CATS.map(([key, name, about]) => {
+          const vs = vlist.filter((v) => (v.category || 'easy') === key);
+          return vs.length ? `<h3 class="sub-h muted">${esc(name)}</h3><p class="small muted cat-about">${esc(about)}</p>` + vs.map((v) => card(v, false)).join('') : '';
+        }).join('')}
         ${!vlist.length && !mine.length ? `<div class="card muted small" style="text-align:center">Ingen videoer på niveau ${esc(level)} endnu.</div>` : ''}
       </section>`;
     drawCovers(view, eps);

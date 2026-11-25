@@ -1,5 +1,5 @@
 // Lululingo offline-cache. Hæv VERSION, når appens filer ændres, så telefonen henter de nye.
-const VERSION = 'lululingo-v9';
+const VERSION = 'lululingo-v10';
 // Stemmefiler (Piper) er store og ændrer sig aldrig – de gemmes i deres egen cache, som bliver liggende
 const VOICES = 'lululingo-voices';
 const VOICE_HOSTS = ['huggingface.co', 'cdnjs.cloudflare.com', 'cdn.jsdelivr.net'];

@@ -55,9 +55,14 @@ Under **Se** ligger der, ud over Lulu-afsnittene, også rigtige japanske videoer
 
 Tilføj en ny video sådan her:
 
-1. Find en video, der må vises i andre apps (indlejring slået til), og som helst har japanske undertekster lavet af en person.
-2. Lav `videos/<YouTube-id>/script.json` med samme felter som `videos/qJfQyxwVIw4/script.json`. Hver replik får `start` og `end` i sekunder, `jp` med mellemrum mellem ordene, samt `da` og `en`. Ordene slås op i `episodes/lexicon.json`, og nye ord tilføjes dér.
-3. Kør:
+Videoerne er delt i kategorier i biblioteket: **Let japansk** (`easy`), **Folkeeventyr og yōkai** (`folk`), **Anime** (`anime`) og **Drama** (`drama`).
+
+En fast video ligger i `videos/<YouTube-id>/` som en af to slags filer:
+
+- **`video.json`** – lavet af appens AI. Kør appen lokalt (`npm run serve`), lav videoen med »Tilføj video«, og gem den som fast video fra browserens konsol: `fetch('/api/save-video', { method: 'POST', body: localStorage.getItem('lululingo.video.<id>') })`. Tilføj `"category"` og evt. `"order"` (rækkefølge i kategorien) i filen. Gemningen virker kun fra selve computeren.
+- **`script.json`** – skrevet i hånden, som `videos/qJfQyxwVIw4/script.json`. Hver replik får `start` og `end` i sekunder, `jp` med mellemrum mellem ordene, samt `da` og `en`. Ordene slås op i `episodes/lexicon.json`.
+
+Find videoer, der må vises i andre apps (indlejring slået til) og helst har japanske undertekster lavet af en person. Kør derefter:
 
 ```powershell
 node tools/build-videos.js

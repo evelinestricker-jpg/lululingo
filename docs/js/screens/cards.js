@@ -1,4 +1,4 @@
-import { db, today } from '../store.js';
+import { db, today, save } from '../store.js';
 import { dueCards, cardsIn, learnedCount, review, nextInterval, fmtInterval, removeCard } from '../srs.js';
 import { esc, icon, lulu, speak, toast } from '../ui.js';
 
@@ -81,12 +81,13 @@ export function render(view) {
         <div class="bar" style="flex:1;height:8px"><span style="width:${pct}%"></span></div>
         <span class="small muted">${done + 1} af ${total}${cram ? ' · ekstra øvelse' : ''}</span>
       </div>
+      ${c.deck === 'kana' ? '' : `<div class="pills" style="justify-content:flex-end"><button class="pill" id="tRead" aria-pressed="${!!db.settings.cardReading}">Vis læsning før svar</button></div>`}
       <div class="flash-wrap">
         <div class="layer l1"></div><div class="layer l2"></div>
         <button class="flash" id="flash" aria-label="${flipped ? 'Kortet er vendt' : 'Vend kortet og se svaret'}">
           <span class="src">${esc(f.src)}</span>
           <span class="grow"></span>
-          ${flipped ? `<span class="reading jp">${esc(backReading(c))}</span>` : ''}
+          ${flipped ? `<span class="reading jp">${esc(backReading(c))}</span>` : frontReading(c) ? `<span class="reading jp">${esc(frontReading(c))}</span>` : ''}
           <span class="front-word jp">${esc(f.word)}</span>
           ${flipped ? `<span class="mean">${esc(tr(c))}</span>` : ''}
           <span class="grow"></span>
@@ -104,6 +105,8 @@ export function render(view) {
         </div>` : `<button class="btn primary block" id="show">Vis svar</button>`}`;
     bindCommon();
     view.querySelector('#flash').onclick = () => { flipped = !flipped; draw(); };
+    const tRead = view.querySelector('#tRead');
+    if (tRead) tRead.onclick = () => { db.settings.cardReading = !db.settings.cardReading; save(); draw(); };
     const show = view.querySelector('#show');
     if (show) show.onclick = () => { flipped = true; draw(); };
     const hear = view.querySelector('#hear');
@@ -115,6 +118,13 @@ export function render(view) {
       if (r === 0 && !cram) queue.push(c); // "Igen" kommer igen i denne runde
       done += 1; flipped = false; draw();
     });
+  }
+
+  // Læsningen i hiragana/katakana på forsiden, når »Vis læsning før svar« er slået til (aldrig på kana-kort)
+  function frontReading(c) {
+    if (!db.settings.cardReading || c.deck === 'kana') return '';
+    if (c.deck === 'kanji') return [c.on, c.kun].filter((x) => x && x !== '–').join(' · ');
+    return c.r && c.r !== c.w ? c.r : '';
   }
 
   function backReading(c) {

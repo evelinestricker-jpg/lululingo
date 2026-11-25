@@ -179,8 +179,36 @@ function cleanToken(t) {
   out.en = String(t.en || '');
   out.type = TYPES.includes(t.type) ? t.type : 'Udtryk';
   out.lvl = LVLS.includes(t.lvl) ? t.lvl : '–';
+  // AI'en glemmer nogle gange betydningen af de små ord
+  const p = PARTICLES[w];
+  if (p) {
+    if (!out.da) out.da = p[1];
+    if (!out.en) out.en = p[2];
+    if (!out.ro) out.ro = p[0];
+    if (out.lvl === '–') out.lvl = 'N5';
+  }
   return out;
 }
+
+const PARTICLES = {
+  'は': ['wa', 'emne-partikel – det vi taler om', 'topic particle'],
+  'が': ['ga', 'subjekt-partikel', 'subject particle'],
+  'を': ['o', 'objekt-partikel (det man gør noget ved)', 'object particle'],
+  'に': ['ni', 'i, på, til (tid, sted, retning)', 'in, at, to'],
+  'で': ['de', 'i, på, med (sted for handlingen, middel)', 'at, in, by, with'],
+  'の': ['no', 'ejefald – »min«, »Pons«', "possessive particle ('s, of)"],
+  'と': ['to', 'og; sammen med', 'and; with'],
+  'も': ['mo', 'også', 'also, too'],
+  'へ': ['e', 'til, mod (retning)', 'to, towards'],
+  'から': ['kara', 'fra; fordi', 'from; because'],
+  'まで': ['made', 'indtil, til', 'until, to'],
+  'や': ['ya', 'og (blandt andet)', 'and (among others)'],
+  'よ': ['yo', 'altså! (fortæller noget nyt)', 'you know!'],
+  'ね': ['ne', '…ikke? (blød afslutning)', 'right? (softening)'],
+  'か': ['ka', 'spørge-partikel', 'question particle'],
+  'けど': ['kedo', 'men', 'but'],
+  'って': ['tte', '(citat) »…«; altså', '(quote) "…"; as for']
+};
 
 function provider() {
   const S = db.settings;
@@ -200,11 +228,12 @@ async function annotateBatch(segs, { title, auto }) {
   const lines = [];
   let next = 0;
   for (const l of raw.slice().sort((a, b) => a.from - b.from)) {
-    const tokens = (Array.isArray(l.tokens) ? l.tokens : []).map(cleanToken).filter(Boolean);
+    // Tankestreg for »ny person taler« i starten af en replik fjernes
+    const tokens = (Array.isArray(l.tokens) ? l.tokens : []).map(cleanToken).filter(Boolean).filter((t, k) => !(k === 0 && t.p && /^[-－‐—]+$/.test(t.w)));
     if (!tokens.some((t) => !t.p)) continue;
     const lf = Math.floor(l.from), lt = Math.min(segs.length - 1, Math.floor(l.to));
     const prev = lines[lines.length - 1];
-    const line = { da: String(l.da || ''), en: String(l.en || ''), tokens };
+    const line = { da: String(l.da || '').replace(/^s*[-－‐—]s*/, ''), en: String(l.en || '').replace(/^s*[-－‐—]s*/, ''), tokens };
     if (prev && lf === lt && prev.from === lf && prev.to === lf) { lines.push(Object.assign(line, { from: lf, to: lf })); continue; }
     const from = next, to = lt; // huller lægges til denne replik
     if (!(to >= from) || lf < next) continue;
@@ -268,11 +297,11 @@ export async function buildVideo({ id, title, channel, duration, auto, segments 
   const lines = results.flatMap((r) => r.lines).map((l, i) => Object.assign({ n: i + 1 }, l));
   const last = segments[segments.length - 1];
   // »Just Right | Complete Beginner …« → »Just Right«
-  const short = String(title || '').split(/\s*[|｜]\s*|【|】/).map((s) => s.trim()).filter(Boolean)[0] || title;
+  const short = String(title || '').split(/\s*[|｜│]\s*|【|】/).map((s) => s.trim()).filter(Boolean)[0] || title;
   return {
     id, source: 'youtube', mine: true,
     title: short || 'YouTube-video', titleDa: results[0].titleDa || title || '', titleEn: results[0].titleEn || title || '',
-    level: estimateLevel(lines), duration: duration || Math.ceil(last.end), channel: String(channel || '').split(/\s*[|｜]\s*/)[0].trim(), channelUrl: '', auto: !!auto,
+    level: estimateLevel(lines), duration: duration || Math.ceil(last.end), channel: String(channel || '').split(/\s*[|｜│]\s*/)[0].trim(), channelUrl: '', auto: !!auto,
     lines
   };
 }

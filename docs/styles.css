@@ -393,3 +393,4 @@ select.input { appearance: none; -webkit-appearance: none; background-image: url
 @keyframes listen { 50% { box-shadow: 0 0 0 16px rgba(229, 72, 77, .18); } }
 .linkish { border: 0; background: none; padding: 0; color: var(--pink); font: inherit; font-weight: 800; text-decoration: underline; }
 .sub-h { margin: 6px 0 0; text-transform: uppercase; letter-spacing: .8px; font-size: 12px; }
+.cat-about { margin: -6px 0 2px; }

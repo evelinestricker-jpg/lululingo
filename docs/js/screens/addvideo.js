@@ -1,5 +1,6 @@
 import { db } from '../store.js';
 import { esc, icon, fmtTime, toast, loadVideoIndex } from '../ui.js';
+import { checkEmbed } from './player.js';
 import { youtubeId, captionsEndpoint, fetchCaptions, parseSubtitleText, buildVideo, saveMyVideo, getMyVideo, hasAiKey, videoInfo } from '../videos.js';
 
 // »Tilføj video«: indsæt et YouTube-link → hent japanske undertekster → AI laver klikbare ord → gem på telefonen
@@ -28,7 +29,7 @@ export async function render(view, params) {
           ${auto ? '' : `<p class="help">Automatisk hentning af undertekster er ikke sat op. Du kan indsætte underteksterne selv, eller sætte det op under <a href="#/settings">Indstillinger</a>.</p>`}
         </section>`;
     } else if (st.step === 'loading') {
-      body = `<section class="card stack add-wait">${thumb(st.id)}<div class="spinner" aria-hidden="true"></div><b>Henter undertekster fra YouTube…</b></section>`;
+      body = `<section class="card stack add-wait">${thumb(st.id)}<div class="spinner" aria-hidden="true"></div><b>Henter videoen fra YouTube…</b></section>`;
     } else if (st.step === 'found') {
       const c = st.cap;
       body = `
@@ -46,9 +47,9 @@ export async function render(view, params) {
         <section class="card stack">
           ${thumb(st.id)}
           <div class="err">${esc(st.err)}</div>
-          ${st.code === 'not_found' ? '' : '<p class="help" style="margin:0">Appen kan kun lave klikbare undertekster, når videoen har <b>japanske undertekster på YouTube</b>. I YouTube-appen kan du se det ved, at der er en <b>CC</b>-knap på videoen, og at <b>Japansk</b> kan vælges under undertekster.</p>'}
+          ${st.code === 'not_found' || st.code === 'blocked' ? '' : '<p class="help" style="margin:0">Appen kan kun lave klikbare undertekster, når videoen har <b>japanske undertekster på YouTube</b>. I YouTube-appen kan du se det ved, at der er en <b>CC</b>-knap på videoen, og at <b>Japansk</b> kan vælges under undertekster.</p>'}
           <button class="btn primary" id="back">Vælg en anden video</button>
-          ${st.code === 'not_found' ? '' : '<button class="btn ghost" id="own">Jeg har underteksterne som fil</button>'}
+          ${st.code === 'not_found' || st.code === 'blocked' ? '' : '<button class="btn ghost" id="own">Jeg har underteksterne som fil</button>'}
         </section>`;
     } else if (st.step === 'paste') {
       body = `
@@ -93,11 +94,21 @@ export async function render(view, params) {
     st.id = id;
     const builtIn = (await loadVideoIndex().catch(() => [])).some((v) => v.id === id);
     if (builtIn || getMyVideo(id)) { toast('Den video har du allerede'); location.hash = '#/watch/' + id; return; }
-    if (!captionsEndpoint()) { toPaste(''); return; }
     st.step = 'loading'; draw();
+    // Tjek samtidig, om videoen overhovedet må vises i andre apps – ellers er der ingen grund til at bruge AI på den
+    const embed = checkEmbed(id);
+    let capErr = null;
+    if (captionsEndpoint()) { try { st.cap = await fetchCaptions(id); } catch (e) { capErr = e; } }
+    const emb = await embed;
+    if (st.dead) return;
+    if (emb === 'blocked' || emb === 'missing') {
+      st.step = 'nocaps'; st.code = emb === 'missing' ? 'not_found' : 'blocked';
+      st.err = emb === 'missing' ? 'Videoen findes ikke eller er slettet.' : 'Ejeren af videoen tillader ikke, at den vises i andre apps, så den kan ikke ses i Lululingo.';
+      draw(); return;
+    }
+    if (!captionsEndpoint()) { toPaste(''); return; }
     try {
-      st.cap = await fetchCaptions(id);
-      if (st.dead) return;
+      if (capErr) throw capErr;
       st.step = 'found';
     } catch (e) {
       if (st.dead) return;

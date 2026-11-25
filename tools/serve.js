@@ -28,6 +28,26 @@ http.createServer((req, res) => {
       .catch((e) => { res.writeHead(500, { 'Content-Type': 'application/json' }); res.end(JSON.stringify({ error: 'error', message: String(e && e.message) })); });
     return;
   }
+  // Kun til udvikling: gem en video, som appen har lavet, som fast video (videos/<id>/video.json).
+  // Bagefter køres »node tools/build-videos.js«. Virker kun fra selve computeren, ikke fra telefonen.
+  if (rel === '/api/save-video' && req.method === 'POST') {
+    const local = ['127.0.0.1', '::1', '::ffff:127.0.0.1'].includes(req.socket.remoteAddress);
+    if (!local) { res.writeHead(403); return res.end(); }
+    let body = '';
+    req.on('data', (c) => { body += c; if (body.length > 5e6) req.destroy(); });
+    req.on('end', () => {
+      try {
+        const v = JSON.parse(body);
+        if (!/^[A-Za-z0-9_-]{11}$/.test(v.id) || !Array.isArray(v.lines) || !v.lines.length) throw new Error('ugyldig video');
+        delete v.mine;
+        const dir = path.resolve(__dirname, '..', 'videos', v.id);
+        fs.mkdirSync(dir, { recursive: true });
+        fs.writeFileSync(path.join(dir, 'video.json'), JSON.stringify(v));
+        res.writeHead(200, { 'Content-Type': 'application/json' }); res.end(JSON.stringify({ ok: true, lines: v.lines.length }));
+      } catch (e) { res.writeHead(400, { 'Content-Type': 'application/json' }); res.end(JSON.stringify({ error: String(e.message) })); }
+    });
+    return;
+  }
   if (rel.endsWith('/')) rel += 'index.html';
   const file = path.resolve(ROOT, '.' + rel);
   if (!file.startsWith(ROOT + path.sep)) { res.writeHead(403); return res.end(); }

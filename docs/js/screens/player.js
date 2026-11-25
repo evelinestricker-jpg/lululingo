@@ -40,6 +40,35 @@ function loadYouTube() {
   return ytApi;
 }
 
+// Må videoen vises i andre apps? Afspiller den lydløst i et skjult vindue et øjeblik.
+// Svar: 'ok', 'blocked' (ejeren tillader det ikke), 'missing' eller 'unknown' (kunne ikke afgøres)
+export function checkEmbed(videoId, ms = 12000) {
+  return loadYouTube().then((YT) => new Promise((resolve) => {
+    const box = document.createElement('div');
+    box.style.cssText = 'position:fixed;left:-9999px;top:0;width:200px;height:120px;pointer-events:none';
+    const inner = document.createElement('div');
+    box.appendChild(inner);
+    document.body.appendChild(box);
+    let p = null, settled = false;
+    const done = (v) => {
+      if (settled) return;
+      settled = true; clearTimeout(timer);
+      setTimeout(() => { try { if (p && p.destroy) p.destroy(); } catch (e) {} box.remove(); }, 0);
+      resolve(v);
+    };
+    const timer = setTimeout(() => done('unknown'), ms);
+    p = new YT.Player(inner, {
+      videoId, width: 200, height: 120,
+      playerVars: { playsinline: 1, mute: 1, origin: location.origin },
+      events: {
+        onReady: (e) => { e.target.mute(); e.target.playVideo(); },
+        onStateChange: (e) => { if (e.data === 1) done('ok'); },
+        onError: (e) => done(e.data === 101 || e.data === 150 || e.data === 153 ? 'blocked' : e.data === 100 ? 'missing' : 'unknown')
+      }
+    });
+  })).catch(() => 'unknown');
+}
+
 function ytMedia(host, videoId, startAt) {
   const handlers = {};
   const emit = (ev, x) => (handlers[ev] || []).forEach((fn) => fn(x));
@@ -196,6 +225,7 @@ async function open(view, kind, id) {
   }
 
   function tick() {
+    if (st.dead) return;
     const t = media.time();
     // Efter »Gentag replik« bliver repliken stående, selvom afspilleren stoppede en anelse inde i den næste
     if (st.stopAt !== null && t >= st.stopAt) { media.pause(); st.stopAt = null; st.hold = st.cur; }
@@ -244,7 +274,7 @@ async function open(view, kind, id) {
       </div>
       <div class="meaning">${esc(tr(t))}</div>
       <div class="meaning2">${esc(other)}</div>
-      <div class="tags"><span class="tag">${esc(t.type || '')}</span><span class="tag mint">${t.lvl && t.lvl !== '–' ? 'JLPT ' + esc(t.lvl) : 'Navn'}</span><span class="tag gray">${esc(E.title)} · ${fmtTime(l.start)}</span></div>
+      <div class="tags"><span class="tag">${esc(t.type || '')}</span>${t.lvl && t.lvl !== '–' ? `<span class="tag mint">JLPT ${esc(t.lvl)}</span>` : t.type === 'Navn' ? '<span class="tag mint">Navn</span>' : ''}<span class="tag gray">${esc(E.title)} · ${fmtTime(l.start)}</span></div>
       <div class="ctx"><span class="j jp">${esc(l.jp)}</span><span class="d">${esc(tr(l))}</span></div>
       ${saved
         ? `<div class="saved-row">${icon('check', 22)}<span>Tilføjet til dine flashcards</span><button data-act="undo">Fortryd</button></div>`
